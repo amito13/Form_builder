@@ -1,0 +1,23 @@
+{
+  "name": "@repo/package",
+  "private": true,
+  "scripts": {
+    "dev": "turbo dev",
+        "build": "turbo build"
+      },
+  "packageManager": "pnpm@8.9.0",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devEngines": {
+    "packageManager": {
+      "name": "pnpm",
+      "version": "^11.18.0",
+      "onFail": "download"
+    }
+  },
+  "type": "module",
+  "devDependencies": {
+    "turbo": "^2.10.8"
+  }
+}
