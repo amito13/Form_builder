@@ -13,9 +13,12 @@
   "license": "ISC",
   "type": "module",
   "devDependencies": {
+    "database": "link:@types/repo/database",
     "typescript": "^7.0.2"
   },
   "dependencies": {
-    "@trpc/server": "^11.18.0"
+    "@trpc/server": "^11.18.0",
+    "zod": "^4.4.3",
+    "@repo/database":"workspace:*"
   }
 }
