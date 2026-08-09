@@ -8,6 +8,20 @@
       "when": 1786026961115,
       "tag": "0000_furry_lockheed",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1786285444853,
+      "tag": "0001_funny_red_skull",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1786286980853,
+      "tag": "0002_pink_sleepwalker",
+      "breakpoints": true
     }
   ]
 }

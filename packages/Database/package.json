@@ -2,29 +2,25 @@
   "name": "@repo/database",
   "version": "1.0.0",
   "type": "module",
-
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     }
   },
-
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch"
   },
-
   "dependencies": {
     "dotenv": "^17.4.2",
     "drizzle-orm": "^0.45.2",
     "pg": "^8.22.0"
   },
-
   "devDependencies": {
+    "@types/node": "^20.19.43",
     "@types/pg": "^8.20.3",
     "drizzle-kit": "^0.31.10",
     "tsx": "^4.23.4",
