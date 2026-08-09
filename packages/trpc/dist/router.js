@@ -74,5 +74,20 @@ exports.appRouter = (0, trpc_1.router)({
                 cause: error,
             });
         }
+    })),
+    getTodos: trpc_1.publicProcedure.query(() => __awaiter(void 0, void 0, void 0, function* () {
+        try {
+            const result = yield database_1.db.select().from(schema.todos);
+            return result;
+        }
+        catch (error) {
+            console.error("DATABASE ERROR:");
+            console.dir(error, { depth: null });
+            throw new unstable_core_do_not_import_1.TRPCError({
+                code: "INTERNAL_SERVER_ERROR",
+                message: error instanceof Error ? error.message : String(error),
+                cause: error,
+            });
+        }
     }))
 });

@@ -32,6 +32,23 @@ export const appRouter = router({
             }); 
        }
     
+    }),
+    getTodos: publicProcedure.query(async () => {
+        try{
+            const result = await db.select().from(schema.todos);
+            return result;
+        } catch (error)
+        {
+            console.error("DATABASE ERROR:");
+            console.dir(error, { depth: null });
+            
+
+            throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: error instanceof Error ? error.message : String(error),
+            cause: error,
+            }); 
+        }
     })
 });
 
