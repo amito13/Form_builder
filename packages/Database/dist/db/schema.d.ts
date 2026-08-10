@@ -375,11 +375,11 @@ export declare const formFieldsTable: import("drizzle-orm/pg-core").PgTableWithC
             name: "form_id";
             tableName: "form_fields";
             dataType: "number";
-            columnType: "PgInteger";
+            columnType: "PgSerial";
             data: number;
-            driverParam: string | number;
-            notNull: false;
-            hasDefault: false;
+            driverParam: number;
+            notNull: true;
+            hasDefault: true;
             isPrimaryKey: false;
             isAutoincrement: false;
             hasRuntimeDefault: false;

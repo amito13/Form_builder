@@ -25,7 +25,7 @@ export const formFieldsTable = pgTable("form_fields", {
     isRequired: boolean('is_required').default(false).notNull(),
     index: numeric('index', { scale: 2 }).notNull(),
     type: fieldTypeEnum('type').notNull(),
-    formId: integer('form_id').references(() => formsTable.id),
+    formId: serial('form_id').references(() => formsTable.id),
     createdAt: timestamp("created_at").defaultNow(),
     updatedAt: timestamp("updated_at").$onUpdate(() => new Date()),
 });
