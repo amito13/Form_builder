@@ -8,5 +8,5 @@ const pool = new Pool({
 export const db = drizzle(pool, {
     schema,
 });
-export { eq, asc, desc } from "drizzle-orm";
+export { eq, asc, desc, max } from "drizzle-orm";
 export * from "./db/schema";
