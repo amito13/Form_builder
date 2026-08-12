@@ -41,4 +41,4 @@ class FormFieldService {
     }
 }
 
-export const formSubmissionService = new FormFieldService()
+export default FormFieldService

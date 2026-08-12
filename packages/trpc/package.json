@@ -19,6 +19,7 @@
   "dependencies": {
     "@trpc/server": "^11.18.0",
     "zod": "^4.4.3",
-    "@repo/database":"workspace:*"
+    "@repo/database":"workspace:*",
+    "@repo/services":"workspace:*"
   }
 }
