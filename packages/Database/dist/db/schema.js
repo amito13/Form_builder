@@ -1,11 +1,12 @@
-import { pgTable, serial, timestamp, varchar, uuid, text, boolean, numeric, pgEnum, integer } from "drizzle-orm/pg-core";
+import { pgTable, serial, timestamp, varchar, uuid, text, boolean, numeric, pgEnum, integer, json } from "drizzle-orm/pg-core";
 export const users = pgTable("users", {
     id: serial("id").primaryKey(),
     name: varchar("name", { length: 256 }).notNull(),
     email: varchar("email", { length: 256 }).notNull().unique(),
+    salt: text('salt'),
     password: varchar("password", { length: 256 }),
-    createdAt: timestamp("created_at").notNull(),
-    updatedAt: timestamp("updated_at").notNull()
+    createdAt: timestamp("created_at").defaultNow(),
+    updatedAt: timestamp("updated_at").defaultNow()
 });
 export const fieldTypeEnum = pgEnum('field_type_enum', ['TEXT', 'NUMBER', 'EMAIL', 'YES_NO', 'PASSWORD']);
 export const formsTable = pgTable("forms", {
@@ -26,6 +27,13 @@ export const formFieldsTable = pgTable("form_fields", {
     index: numeric('index', { scale: 2 }).notNull(),
     type: fieldTypeEnum('type').notNull(),
     formId: serial('form_id').references(() => formsTable.id),
+    createdAt: timestamp("created_at").defaultNow(),
+    updatedAt: timestamp("updated_at").$onUpdate(() => new Date()),
+});
+export const formSubmissionsTable = pgTable("form_submissions", {
+    id: serial("id").primaryKey(),
+    formId: serial('form_id').references(() => formsTable.id),
+    values: json('values').$type().notNull(),
     createdAt: timestamp("created_at").defaultNow(),
     updatedAt: timestamp("updated_at").$onUpdate(() => new Date()),
 });
