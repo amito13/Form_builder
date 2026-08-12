@@ -4,7 +4,7 @@ import { createFormInput } from "../form/model";
 const fieldTypeEnum = z.enum(['TEXT', 'NUMBER', 'EMAIL', 'YES_NO', 'PASSWORD'])
 
 export const createFieldInput = z.object({
-    lable: z.string().min(1).max(55).describe("Field Label"),
+    label: z.string().min(1).max(55).describe("Field Label"),
     type: fieldTypeEnum.describe("Field Type"),
     formId: z.number().int().describe("Form ID"),
     description: z.string().max(300).optional().describe("Field Description"),
@@ -16,7 +16,7 @@ export type CreateFieldInputType = z.infer<typeof createFieldInput>;
 
 export const updateFieldInput = z.object({
     fieldId: z.number().int().describe("Field ID"),
-    lable: z.string().min(1).max(55).optional().describe("Field Label"),
+    label: z.string().min(1).max(55).optional().describe("Field Label"),
     type: fieldTypeEnum.optional().describe("Field Type"),
     description: z.string().max(300).optional().describe("Field Description"),
     placeholder: z.string().max(100).optional().describe("Field Placeholder"),
