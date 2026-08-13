@@ -8,8 +8,7 @@ import {createUserWithEmailAndPasswordInputModel, createUserWithEmailAndPassword
     signInUserWithEmailAndPasswordInputModel, signInUserWithEmailAndPasswordOutputModel
 } from "./model";
 
-const TAGS = ["Authentication"]
-const getPath = generatePath("/authenctication")
+const getPath = generatePath("/authentication")
 
 export const authRouter = router({
     createUserWithEmailAndPassword: publicProcedure

@@ -3,7 +3,7 @@ import { z } from "zod";
 export const createFormInput = z.object({
    title: z.string().min(1).max(55).describe("Form Title"),
    description: z.string().max(300).optional().describe("Form Description"),
-   createdBy: z.number().int().describe("User ID"),
+   createdBy: z.any().describe("User ID"),
 });
 export type CreateFormInputType = z.infer<typeof createFormInput>;
 // export interface CreateFormInputType {
@@ -13,7 +13,7 @@ export type CreateFormInputType = z.infer<typeof createFormInput>;
 // }
 
 export const listFormByUserIdInput = z.object({
-    userId: z.number().int().describe("User ID"),
+    userId: z.any().describe("User ID"),
 });
 export type ListFormByUserIdInputType = z.infer<typeof listFormByUserIdInput>;
 // export interface ListFormByUserIdInputType {
