@@ -206,6 +206,13 @@ settings:
 importers:
 
   .:
+    dependencies:
+      '@types/express':
+        specifier: ^5.0.6
+        version: 5.0.6
+      express:
+        specifier: ^5.2.1
+        version: 5.2.1(supports-color@8.1.1)
     devDependencies:
       turbo:
         specifier: ^2.10.8
@@ -216,9 +223,6 @@ importers:
       '@repo/trpc':
         specifier: workspace:*
         version: link:../../packages/trpc
-      '@repo/utils':
-        specifier: workspace:*
-        version: link:../../packages/utils
       '@trpc/server':
         specifier: ^11.18.0
         version: 11.18.0(typescript@7.0.2)
@@ -262,9 +266,6 @@ importers:
       '@repo/trpc':
         specifier: workspace:*
         version: link:../../packages/trpc
-      '@repo/utils':
-        specifier: workspace:*
-        version: link:../../packages/utils
       '@tanstack/react-query':
         specifier: ^5.101.4
         version: 5.101.4(react@19.2.0)
@@ -353,9 +354,6 @@ importers:
       '@repo/trpc':
         specifier: workspace:*
         version: link:../../packages/trpc
-      '@repo/utils':
-        specifier: workspace:*
-        version: link:../../packages/utils
       '@tanstack/react-query':
         specifier: 5.101.4
         version: 5.101.4(react@19.2.4)

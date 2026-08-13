@@ -3,8 +3,8 @@
   "private": true,
   "scripts": {
     "dev": "turbo dev",
-        "build": "turbo build"
-      },
+    "build": "turbo build"
+  },
   "packageManager": "pnpm@8.9.0",
   "keywords": [],
   "author": "",
@@ -19,5 +19,9 @@
   "type": "module",
   "devDependencies": {
     "turbo": "^2.10.8"
+  },
+  "dependencies": {
+    "@types/express": "^5.0.6",
+    "express": "^5.2.1"
   }
 }

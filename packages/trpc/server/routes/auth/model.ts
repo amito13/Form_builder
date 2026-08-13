@@ -7,7 +7,7 @@ export const createUserWithEmailAndPasswordInputModel = z.object({
 })
 
 export const createUserWithEmailAndPasswordOutputModel = z.object({
-    id: z.string().describe("The unique identifier of the user")
+    id: z.number().describe("The unique identifier of the user")
 })
 
 export const signInUserWithEmailAndPasswordInputModel = z.object({
@@ -15,13 +15,13 @@ export const signInUserWithEmailAndPasswordInputModel = z.object({
     password: z.string().describe("The password of the user")
 })
 export const signInUserWithEmailAndPasswordOutputModel = z.object({
-    id: z.string().describe('id of the user created')
+    id: z.number().describe('id of the user created')
 })
 
 export const getLoggedInUserInfoInputModel = z.undefined()
 
 export const getLoggedInUserInfoOutputModel = z.object({
-    id: z.string().describe('id of the user created'),
+    id: z.number().describe('id of the user created'),
     email: z.email().describe('email of the user'),
     fullName: z.string().describe('name of the user'),
     profileImageUrl: z.string().describe('image of the user').optional().nullable(),

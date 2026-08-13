@@ -33,7 +33,7 @@ class UserService {
         }
 
     }
-    private async getUserInfoById(id: number) {
+    public async getUserInfoById(id: any) {
         const user = await db.select({
             id: users.id,
             email: users.email,
@@ -68,7 +68,7 @@ class UserService {
         const {token} = await this.generateUserToken({id: userId.toString()})
         return {
             id: userId,
-            email
+            token
         }
     }
     public async signInUserWithEmailAndPassword(payload: SignInUserWithEmailAndPasswordInputType) {
