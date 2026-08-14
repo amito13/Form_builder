@@ -3,7 +3,7 @@ import {z} from "zod";
 export const submitFormInput = z.object({
     formId: z.any().describe("Form ID"),
     values: z.array(z.object({
-        formFieldId: z.string().describe("Form Field ID"),
+        formFieldId: z.number().int().describe("Form Field ID"),
         value: z.string().describe("Field Value")
     })).min(1).describe("Field Values")
 })
