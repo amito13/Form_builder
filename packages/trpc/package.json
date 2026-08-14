@@ -13,8 +13,7 @@
   "license": "ISC",
   "type": "module",
   "devDependencies": {
-    "database": "link:@types/repo/database",
-    "typescript": "^7.0.2"
+    "typescript": "5.9.2"
   },
   "dependencies": {
     "@trpc/server": "^11.18.0",
