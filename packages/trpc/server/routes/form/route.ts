@@ -11,7 +11,7 @@ import {
 import {z}  from "zod";
 import {authenticatedProcedure, publicProcedure, router} from "../../trpc";
 import {generatePath} from "../../utils/path-generator";
-import {formFieldService, formService} from "../../services/index";
+import {formFieldService, formService,formSubmissionService} from "../../services/index";
 
 const getPath = generatePath("/form");
 
@@ -47,7 +47,37 @@ export const formRouter = router({
         .output(createFieldOutputModel)
         .mutation(async ({input}) => {
             return formFieldService.createField(input)
+        }),
+    updateField: authenticatedProcedure
+        .input(updateFieldInputModel)
+        .output(updateFieldOutputModel)
+        .mutation(async ({input}) => {
+            return formFieldService.updateField(input)
+        }),
+    deleteField: authenticatedProcedure
+        .input(deleteFieldInputModel)
+        .output(deleteFieldOutputModel)
+        .mutation(async ({input}) => {
+            return formFieldService.deleteField(input)
+        }),
+    getForm: authenticatedProcedure
+        .input(getFormInputModel)
+        .output(getFormOutputModel)
+        .query(async ({input}) => {
+            return formService.getFormById({formId: input.formId})
+        }),
+    submitForm: publicProcedure 
+        .input(submitFormInputModel)
+        .output(submitFormOutputModel)
+        .mutation(async ({input}) => {
+            const result = await formSubmissionService.submitForm(input)
+            return { ...result, id: String(result.id) }//attenttion needed
+        }),
+    getFormSubmissions: authenticatedProcedure
+        .input(getFormSubmissionsInputModel)
+        .output(getFormSubmissionsOutputModel)
+        .query(async ({input}) => {
+            return formSubmissionService.getFormSubmissions({formId: input.formId})
         })
-    
     
 })

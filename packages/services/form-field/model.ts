@@ -15,7 +15,7 @@ export const createFieldInput = z.object({
 export type CreateFieldInputType = z.infer<typeof createFieldInput>;
 
 export const updateFieldInput = z.object({
-    fieldId: z.number().int().describe("Field ID"),
+    fieldId: z.any().describe("Field ID"),
     label: z.string().min(1).max(55).optional().describe("Field Label"),
     type: fieldTypeEnum.optional().describe("Field Type"),
     description: z.string().max(300).optional().describe("Field Description"),

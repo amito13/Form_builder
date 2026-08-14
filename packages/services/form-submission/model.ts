@@ -1,7 +1,7 @@
 import {z} from "zod";
 
 export const submitFormInput = z.object({
-    formId: z.number().int().describe("Form ID"),
+    formId: z.any().describe("Form ID"),
     values: z.array(z.object({
         formFieldId: z.string().describe("Form Field ID"),
         value: z.string().describe("Field Value")
@@ -11,6 +11,6 @@ export const submitFormInput = z.object({
 export type SubmitFormInputType = z.infer<typeof submitFormInput>;
 
 export const getFormSubmissionsInput = z.object({
-    formId: z.number().int().describe("Form ID"),
+    formId: z.any().describe("Form ID"),
 })
 export type GetFormSubmissionsInputType = z.infer<typeof getFormSubmissionsInput>;

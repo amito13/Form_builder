@@ -50,8 +50,8 @@ export const updateFieldInputModel = z.object({
     fieldId: z.string().uuid().describe('UUID of the field to update'),
     label: z.string().max(100).optional(),
     type: fieldTypeEnum.optional(),
-    description: z.string().nullable().optional(),
-    placeholder: z.string().nullable().optional(),
+    description: z.string().optional(),
+    placeholder: z.string().optional(),
     isRequired: z.boolean().optional(),
 })
 
@@ -60,7 +60,7 @@ export const updateFieldOutputModel = z.object({
 })
 
 export const deleteFieldInputModel = z.object({
-    fieldId: z.string().uuid().describe('UUID of the field to delete'),
+    fieldId: z.any().describe('UUID of the field to delete'),
 })
 
 export const deleteFieldOutputModel = z.object({
@@ -87,7 +87,7 @@ export const getFormOutputModel = z.object({
 }).nullable()
 
 export const submitFormInputModel = z.object({
-    formId: z.string().uuid().describe('UUID of the form being submitted'),
+    formId: z.any().describe('UUID of the form being submitted'),
     values: z.array(z.object({
         formFieldId: z.string().uuid().describe('UUID of the form field'),
         value: z.string().describe('Answer value for this field'),
@@ -95,19 +95,19 @@ export const submitFormInputModel = z.object({
 })
 
 export const submitFormOutputModel = z.object({
-    id: z.string().describe('ID of the created submission'),
+    id: z.any().describe('ID of the created submission'),
 })
 
 export const getFormSubmissionsInputModel = z.object({
-    formId: z.string().uuid().describe('UUID of the form'),
+    formId: z.any().describe('UUID of the form'),
 })
 
 export const getFormSubmissionsOutputModel = z.array(
     z.object({
-        id: z.string(),
+        id: z.any(),
         createdAt: z.date().nullable(),
         values: z.array(z.object({
-            formFieldId: z.string(),
+            formFieldId: z.string().uuid(),
             value: z.string(),
         })).nullable(),
     })

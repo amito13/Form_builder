@@ -21,7 +21,7 @@ export type ListFormByUserIdInputType = z.infer<typeof listFormByUserIdInput>;
 // }
 
 export const getFormByIdInput = z.object({
-    formId: z.number().int().describe("Form ID"),
+    formId: z.any().describe("Form ID"),
 });
 
 
