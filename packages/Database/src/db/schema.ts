@@ -46,7 +46,7 @@ export const formFieldsTable = pgTable("form_fields", {
   updatedAt: timestamp("updated_at").$onUpdate(() => new Date()),
 })
 export interface FormSubmissionValue {
-    formFieldId: string
+    formFieldId: number
     value: string
 }
 export type FormSubmissionValueRow = FormSubmissionValue[]

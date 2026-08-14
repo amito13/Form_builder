@@ -16,8 +16,26 @@ export function createCookieFactory(res) {
     };
 }
 export function getCookieFactory(req) {
+    function parseCookieHeader(cookieHeader) {
+        if (!cookieHeader)
+            return {};
+        return cookieHeader
+            .split(";")
+            .map(chunk => chunk.trim())
+            .filter(Boolean)
+            .reduce((acc, part) => {
+            const separator = part.indexOf("=");
+            if (separator <= 0)
+                return acc;
+            const key = decodeURIComponent(part.slice(0, separator).trim());
+            const value = decodeURIComponent(part.slice(separator + 1).trim());
+            acc[key] = value;
+            return acc;
+        }, {});
+    }
     return function getCookie(name) {
-        return req.cookies?.[name];
+        const headerCookies = parseCookieHeader(req.headers.cookie);
+        return req.cookies?.[name] ?? headerCookies[name];
     };
 }
 export function clearCookieFactory(res) {

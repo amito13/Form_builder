@@ -443,7 +443,7 @@ export declare const formFieldsTable: import("drizzle-orm/pg-core").PgTableWithC
     dialect: "pg";
 }>;
 export interface FormSubmissionValue {
-    formFieldId: string;
+    formFieldId: number;
     value: string;
 }
 export type FormSubmissionValueRow = FormSubmissionValue[];

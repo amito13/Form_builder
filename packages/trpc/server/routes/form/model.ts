@@ -32,7 +32,7 @@ const formFieldObject = z.object({
     index: z.string().describe('Fractional index for ordering'),
 })
 export const createFieldInputModel = z.object({
-    formId: z.string().uuid().describe('UUID of the form'),
+    formId: z.number().int().describe('ID of the form'),
     label: z.string().max(100).describe('Display label for the field'),
     type: fieldTypeEnum.describe('Type of the field'),
     description: z.string().optional(),
@@ -47,7 +47,7 @@ export const createFieldOutputModel = z.object({
 })
 
 export const updateFieldInputModel = z.object({
-    fieldId: z.string().uuid().describe('UUID of the field to update'),
+    fieldId: z.number().int().describe('ID of the field to update'),
     label: z.string().max(100).optional(),
     type: fieldTypeEnum.optional(),
     description: z.string().optional(),
@@ -60,7 +60,7 @@ export const updateFieldOutputModel = z.object({
 })
 
 export const deleteFieldInputModel = z.object({
-    fieldId: z.any().describe('UUID of the field to delete'),
+    fieldId: z.number().int().describe('ID of the field to delete'),
 })
 
 export const deleteFieldOutputModel = z.object({
@@ -68,13 +68,13 @@ export const deleteFieldOutputModel = z.object({
 })
 
 export const getFieldsInputModel = z.object({
-    formId: z.string().uuid().describe('UUID of the form'),
+    formId: z.number().int().describe('ID of the form'),
 })
 
 export const getFieldsOutputModel = z.array(formFieldObject)
 
 export const getFormInputModel = z.object({
-    formId: z.string().uuid().describe('UUID of the form'),
+    formId: z.number().int().describe('ID of the form'),
 })
 
 export const getFormOutputModel = z.object({
@@ -87,9 +87,9 @@ export const getFormOutputModel = z.object({
 }).nullable()
 
 export const submitFormInputModel = z.object({
-    formId: z.any().describe('UUID of the form being submitted'),
+    formId: z.number().int().describe('ID of the form being submitted'),
     values: z.array(z.object({
-        formFieldId: z.string().uuid().describe('UUID of the form field'),
+        formFieldId: z.number().int().describe('ID of the form field'),
         value: z.string().describe('Answer value for this field'),
     })).min(1),
 })
@@ -99,7 +99,7 @@ export const submitFormOutputModel = z.object({
 })
 
 export const getFormSubmissionsInputModel = z.object({
-    formId: z.any().describe('UUID of the form'),
+    formId: z.number().int().describe('ID of the form'),
 })
 
 export const getFormSubmissionsOutputModel = z.array(
@@ -107,7 +107,7 @@ export const getFormSubmissionsOutputModel = z.array(
         id: z.any(),
         createdAt: z.date().nullable(),
         values: z.array(z.object({
-            formFieldId: z.string().uuid(),
+            formFieldId: z.number().int(),
             value: z.string(),
         })).nullable(),
     })
