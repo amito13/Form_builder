@@ -1,5 +1,5 @@
 import {randomBytes,createHmac} from 'crypto'
-import * as JWT from 'jsonwebtoken'
+import jwt from "jsonwebtoken";
 import {db,eq} from "@repo/database"
 import {users} from "@repo/database"
 import { type CreateUserWithEmailAndPasswordInputType, GenerateUserTokenPayloadType, SignInUserWithEmailAndPasswordInputType, createUserWithEmailAndPasswordInput, generateUserTokenPayload, signInUserWithEmailAndPasswordInput } from './model'
@@ -18,13 +18,13 @@ class UserService {
 
     private async generateUserToken(payload: GenerateUserTokenPayloadType) {
         const {id}  = await generateUserTokenPayload.parseAsync(payload)
-        const token = JWT.sign({id},process.env.JWT_SECRET as string)
+        const token = jwt.sign({id},process.env.JWT_SECRET as string)
         return {token}
     }
 
     private async verifyUserToken(token: string) :Promise<GenerateUserTokenPayloadType> {
         try{
-            const verificationResult = JWT.verify(token,process.env.JWT_SECRET as string)// as GenerateUserTokenPayloadType
+            const verificationResult = jwt.verify(token,process.env.JWT_SECRET as string)// as GenerateUserTokenPayloadType
             return verificationResult as GenerateUserTokenPayloadType
 
         }
