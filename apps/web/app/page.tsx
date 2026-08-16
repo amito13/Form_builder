@@ -169,18 +169,6 @@ export default function Home() {
   const isAuthenticated = userQuery.isSuccess;
 
   return (
-<<<<<<< HEAD
-    <main className="min-h-screen bg-zinc-950 text-white flex items-center justify-center p-6">
-      <div className="w-full max-w-md">
-        {/* Header */}
-        <div className="mb-8">
-          <p className="text-sm text-zinc-500 mb-2">
-            API Status : {data?.message ?? "Loading..."}
-          </p>
-        
-        </div>
-
-=======
     <main className="min-h-screen p-4 sm:p-8 bg-[var(--background)] text-[var(--foreground)]">
       <div className="mx-auto max-w-5xl rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4 shadow-sm sm:p-6">
         <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
@@ -218,8 +206,6 @@ export default function Home() {
             );
           })}
         </div>
-
->>>>>>> 02a0456c4e1d3f0b8463742ba5c39d3b55629818
         {activeTab === "auth" && (
           <section className="grid gap-4 md:grid-cols-2">
             <div className="rounded-xl border border-[var(--border)] p-4">
