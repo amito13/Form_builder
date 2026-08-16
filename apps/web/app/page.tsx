@@ -169,6 +169,7 @@ export default function Home() {
   const isAuthenticated = userQuery.isSuccess;
 
   return (
+<<<<<<< HEAD
     <main className="min-h-screen bg-zinc-950 text-white flex items-center justify-center p-6">
       <div className="w-full max-w-md">
         {/* Header */}
@@ -179,6 +180,46 @@ export default function Home() {
         
         </div>
 
+=======
+    <main className="min-h-screen p-4 sm:p-8 bg-[var(--background)] text-[var(--foreground)]">
+      <div className="mx-auto max-w-5xl rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4 shadow-sm sm:p-6">
+        <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h1 className="text-2xl font-semibold">Form Builder UI</h1>
+            <p className="text-sm text-[var(--muted)]">
+              Backend: {healthQuery.data?.message ?? "Checking API..."}
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+            className="rounded-lg border border-[var(--border)] px-4 py-2 text-sm font-medium hover:opacity-90"
+          >
+            {theme === "light" ? "Dark mode" : "Light mode"}
+          </button>
+        </div>
+
+        <div className="mb-5 flex flex-wrap gap-2">
+          {tabs.map((tab) => {
+            const active = tab.id === activeTab;
+            return (
+              <button
+                key={tab.id}
+                type="button"
+                onClick={() => setActiveTab(tab.id)}
+                className={`rounded-lg px-3 py-2 text-sm font-medium transition ${
+                  active
+                    ? "bg-[var(--accent)] text-[var(--accent-foreground)]"
+                    : "border border-[var(--border)]"
+                }`}
+              >
+                {tab.label}
+              </button>
+            );
+          })}
+        </div>
+
+>>>>>>> 02a0456c4e1d3f0b8463742ba5c39d3b55629818
         {activeTab === "auth" && (
           <section className="grid gap-4 md:grid-cols-2">
             <div className="rounded-xl border border-[var(--border)] p-4">
