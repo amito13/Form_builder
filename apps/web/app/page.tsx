@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
@@ -719,4 +717,3 @@ export default function Home() {
     </main>
   );
 }
->>>>>>> 58c2d21143823d025f0f47587162265d64eb7746

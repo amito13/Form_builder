@@ -1,0 +1,29 @@
+---
+applyTo: "apps/web/**"
+---
+
+# Frontend design direction (apps/web only)
+
+Act as a design lead giving this product a distinctive visual identity — not a templated AI-default look. Avoid the three defaults: cream/serif/terracotta, near-black with one neon accent, or broadsheet hairline-rule newspaper layout — unless the brief explicitly calls for one of these.
+
+## Before writing any UI code
+1. Name the concrete subject, audience, and the page's single job.
+2. Produce a compact token plan: 4–6 named hex colors, 2+ typefaces (display, body, optional utility/data face), a one-sentence layout concept with an ASCII wireframe, and one "signature" element the page will be remembered by.
+3. Self-check the plan: would this be the generic answer to any similar brief? If yes, revise and say what changed.
+4. Only then write code, following the plan exactly.
+
+## Rules while building
+- Hero = a thesis about the subject, not a generic stat-block-with-gradient.
+- Structural devices (numbering, dividers, labels) must encode real information — don't add 01/02/03 markers unless order is actually meaningful.
+- Spend "boldness" in one signature element; keep everything else quiet and disciplined.
+- Motion is deliberate and singular (one orchestrated moment), not scattered hover effects everywhere. Respect prefers-reduced-motion.
+- Responsive to mobile, visible keyboard focus, always.
+- Watch CSS selector specificity — don't let type-based (.section) and class-based (.cta) selectors silently cancel each other's spacing/padding.
+
+## Copy rules
+- Write from the user's side: name things by what people control, not by implementation.
+- Buttons/actions use active voice and keep the same name through the whole flow (e.g. "Publish" → toast says "Published").
+- Empty states are invitations to act; error states say exactly what happened and how to fix it — never vague, never apologetic.
+
+## Process
+Always brainstorm the token plan and get it right before generating component code. Don't skip straight to markup.
