@@ -1,0 +1,58 @@
+{
+  "baseUrl": "http://localhost:8000/trpc",
+  "user": {
+    "name": "Amit Dewangan",
+    "email": "amit@example.com",
+    "password": "secret123"
+  },
+  "createForm": {
+    "title": "Customer Feedback Form",
+    "description": "Collect post-service feedback"
+  },
+  "fields": [
+    {
+      "label": "Email",
+      "type": "EMAIL",
+      "description": "Customer email",
+      "placeholder": "john@example.com",
+      "isRequired": true
+    },
+    {
+      "label": "Would you recommend us?",
+      "type": "YES_NO",
+      "description": "Recommendation answer",
+      "placeholder": "Yes/No",
+      "isRequired": true
+    }
+  ],
+  "submissionTemplate": {
+    "formId": 101,
+    "values": [
+      {
+        "formFieldId": 501,
+        "value": "john@example.com"
+      },
+      {
+        "formFieldId": 502,
+        "value": "Yes"
+      }
+    ]
+  },
+  "testOrder": [
+    "health",
+    "auth.createUserWithEmailAndPassword",
+    "auth.signInUserWithEmailAndPassword",
+    "auth.getLoggedInUserInfo",
+    "form.createForm",
+    "form.listForms",
+    "form.createField",
+    "form.getFields",
+    "form.getForm",
+    "form.submitForm",
+    "form.getFormSubmissions"
+  ],
+  "notes": [
+    "Replace formId/fieldId values in later requests with actual IDs returned by createForm/createField.",
+    "Keep cookie/session for authenticated procedures."
+  ]
+}
