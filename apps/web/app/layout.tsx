@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Form Builder",
-  description: "Tabbed form builder frontend with light and dark theme modes",
+  title: "Form Builder Workspace",
+  description: "Workspace index for scanning and opening forms",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -24,9 +24,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <Provider>
-          {children}
-        </Provider>
+        <Provider>{children}</Provider>
       </body>
     </html>
   );
