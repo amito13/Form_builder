@@ -20,6 +20,9 @@ export const signInUserWithEmailAndPasswordOutputModel = z.object({
 
 export const getLoggedInUserInfoInputModel = z.undefined()
 
+export const signOutInputModel = z.undefined()
+export const signOutOutputModel = z.undefined()
+
 export const getLoggedInUserInfoOutputModel = z.object({
     id: z.number().describe('id of the user created'),
     email: z.email().describe('email of the user'),

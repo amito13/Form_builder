@@ -16,7 +16,7 @@ export default function FormsPage() {
     retry: false,
   });
 
-  const forms = formsQuery.data ?? [];
+  const forms = useMemo(() => formsQuery.data ?? [], [formsQuery.data]);
   const filteredForms = useMemo(() => {
     const query = search.trim().toLowerCase();
     if (!query) return forms;
@@ -55,18 +55,18 @@ export default function FormsPage() {
     : "No updates yet";
 
   return (
-    <main className="min-h-screen bg-[var(--background)] px-4 py-8 text-[var(--foreground)] sm:px-6 lg:px-8">
+    <main className="min-h-screen bg-background px-4 py-8 text-foreground sm:px-6 lg:px-8">
       <div className="mx-auto max-w-6xl">
-        <header className="mb-8 rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-[0_20px_50px_rgba(15,23,42,0.04)]">
+        <header className="card mb-8 rounded-3xl p-6">
           <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
             <div className="max-w-2xl">
-              <p className="text-xs font-medium uppercase tracking-[0.18em] text-[var(--muted)]">
+              <p className="text-xs font-medium uppercase tracking-[0.18em] text-text-muted">
                 Workspace index
               </p>
-              <h1 className="mt-2 text-3xl font-semibold tracking-tight text-[var(--foreground)] md:text-4xl">
+              <h1 className="mt-2 text-3xl font-semibold tracking-tight text-text-primary md:text-4xl">
                 Your forms
               </h1>
-              <p className="mt-3 text-sm leading-6 text-[var(--muted)] md:text-base">
+              <p className="mt-3 text-sm leading-6 text-text-muted md:text-base">
                 Scan the current library, open the right form, and keep active
                 work close at hand.
               </p>
@@ -75,13 +75,13 @@ export default function FormsPage() {
             <div className="flex items-center gap-3">
               <Link
                 href="/"
-                className="inline-flex items-center justify-center rounded-xl border border-[var(--border)] bg-transparent px-4 py-2.5 text-sm font-medium text-[var(--foreground)] transition hover:border-[var(--accent)] hover:text-[var(--accent)]"
+                className="btn-secondary interactive px-4 py-2.5 text-sm"
               >
                 Builder
               </Link>
               <Link
                 href="/"
-                className="inline-flex items-center justify-center rounded-xl bg-[var(--accent)] px-4 py-2.5 text-sm font-semibold text-[var(--accent-foreground)] transition hover:opacity-90"
+                className="btn-primary interactive px-4 py-2.5 text-sm"
               >
                 New form
               </Link>
@@ -89,22 +89,22 @@ export default function FormsPage() {
           </div>
 
           <div className="mt-6 grid gap-3 sm:grid-cols-3">
-            <div className="rounded-2xl border border-[var(--border)] bg-[var(--background)] px-4 py-3">
-              <p className="text-xs uppercase tracking-[0.16em] text-[var(--muted)]">
+            <div className="rounded-2xl border border-border bg-canvas px-4 py-3">
+              <p className="text-xs uppercase tracking-[0.16em] text-text-muted">
                 Forms
               </p>
               <p className="mt-2 font-mono text-xl font-semibold">{summary}</p>
             </div>
-            <div className="rounded-2xl border border-[var(--border)] bg-[var(--background)] px-4 py-3">
-              <p className="text-xs uppercase tracking-[0.16em] text-[var(--muted)]">
+            <div className="rounded-2xl border border-border bg-canvas px-4 py-3">
+              <p className="text-xs uppercase tracking-[0.16em] text-text-muted">
                 Latest update
               </p>
               <p className="mt-2 font-mono text-xl font-semibold">
                 {latestSummary}
               </p>
             </div>
-            <div className="rounded-2xl border border-[var(--border)] bg-[var(--background)] px-4 py-3">
-              <p className="text-xs uppercase tracking-[0.16em] text-[var(--muted)]">
+            <div className="rounded-2xl border border-border bg-canvas px-4 py-3">
+              <p className="text-xs uppercase tracking-[0.16em] text-text-muted">
                 Visible
               </p>
               <p className="mt-2 font-mono text-xl font-semibold">
@@ -115,16 +115,16 @@ export default function FormsPage() {
         </header>
 
         <section className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <label className="flex flex-1 max-w-xl items-center gap-3 rounded-2xl border border-[var(--border)] bg-[var(--surface)] px-4 py-3 shadow-[0_10px_30px_rgba(15,23,42,0.04)]">
-            <span className="text-sm text-[var(--muted)]">Search</span>
+          <label className="card flex max-w-xl flex-1 items-center gap-3 rounded-2xl px-4 py-3">
+            <span className="text-sm text-text-muted">Search</span>
             <input
               value={search}
               onChange={(event) => setSearch(event.target.value)}
               placeholder="Title, description, or form ID"
-              className="w-full bg-transparent text-sm outline-none placeholder:text-[var(--muted)]"
+              className="w-full border-0 bg-transparent p-0 text-sm outline-none placeholder:text-text-muted"
             />
           </label>
-          <p className="text-sm text-[var(--muted)]">
+          <p className="text-sm text-text-muted">
             {search.trim()
               ? "Showing matching forms only."
               : "All forms from your workspace."}
@@ -136,13 +136,13 @@ export default function FormsPage() {
             {Array.from({ length: 6 }).map((_, index) => (
               <div
                 key={index}
-                className="animate-pulse rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-5"
+                className="card animate-pulse rounded-2xl p-5"
               >
-                <div className="h-3 w-20 rounded-full bg-[var(--border)]" />
-                <div className="mt-4 h-7 w-3/4 rounded-lg bg-[var(--border)]" />
-                <div className="mt-4 h-4 w-full rounded-md bg-[var(--border)]" />
-                <div className="mt-2 h-4 w-2/3 rounded-md bg-[var(--border)]" />
-                <div className="mt-6 h-10 rounded-xl bg-[var(--border)]" />
+                <div className="h-3 w-20 rounded-full bg-border" />
+                <div className="mt-4 h-7 w-3/4 rounded-lg bg-border" />
+                <div className="mt-4 h-4 w-full rounded-md bg-border" />
+                <div className="mt-2 h-4 w-2/3 rounded-md bg-border" />
+                <div className="mt-6 h-10 rounded-xl bg-border" />
               </div>
             ))}
           </div>
@@ -162,7 +162,7 @@ export default function FormsPage() {
           !formsQuery.isError &&
           forms.length > 0 &&
           filteredForms.length === 0 && (
-            <div className="rounded-3xl border border-dashed border-[var(--border)] bg-[var(--surface)] p-10 text-center text-sm text-[var(--muted)]">
+            <div className="card rounded-3xl border-dashed p-10 text-center text-sm text-text-muted">
               No forms match “{search.trim()}”.
             </div>
           )}

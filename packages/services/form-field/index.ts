@@ -87,6 +87,17 @@ class FormFieldService {
 
     }
 
+    public async getFieldsById(fieldId: number) {
+        const result = await db
+            .select({ formId: formFieldsTable.formId })
+            .from(formFieldsTable)
+            .where(eq(formFieldsTable.id, fieldId))
+
+        const field = result[0]
+        if (!field?.formId) throw new Error(`Field with ID ${fieldId} was not found`)
+        return { formId: field.formId }
+    }
+
     public async deleteField(payload: DeleteFieldInputType) {
     
         const {fieldId} = await deleteFieldInput.parseAsync(payload)

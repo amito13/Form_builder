@@ -118,9 +118,17 @@ export default function Home() {
       void userQuery.refetch();
     },
   });
-  const createFormMutation = trpc.form.createForm.useMutation({
+  const signOutMutation = trpc.auth.signOut.useMutation({
     onSuccess: async () => {
+      await utils.auth.getLoggedInUserInfo.invalidate();
+      await utils.form.listForms.invalidate();
+      setSelectedFormId(null);
+    },
+  });
+  const createFormMutation = trpc.form.createForm.useMutation({
+    onSuccess: async (form) => {
       setFormTitle("");
+      setSelectedFormId(Number(form.id));
       setFormDescription("");
       await utils.form.listForms.invalidate();
     },
@@ -281,10 +289,19 @@ export default function Home() {
               </div>
               <div className="mt-4 rounded-lg border border-[var(--border)] p-3 text-sm">
                 {isAuthenticated ? (
-                  <p>
-                    Logged in as <strong>{userQuery.data.fullName}</strong> (
-                    {userQuery.data.email})
-                  </p>
+                  <div className="flex flex-wrap items-center justify-between gap-3">
+                    <p>
+                      Logged in as <strong>{userQuery.data.fullName}</strong> (
+                      {userQuery.data.email})
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() => signOutMutation.mutate()}
+                      className="rounded-lg border border-[var(--border)] px-3 py-1 text-sm"
+                    >
+                      Sign out
+                    </button>
+                  </div>
                 ) : (
                   <p className="text-[var(--muted)]">
                     Not authenticated yet. Sign in to continue.

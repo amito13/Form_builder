@@ -1,11 +1,12 @@
 import { userService } from "../../services";
 import {authenticatedProcedure, publicProcedure, router} from "../../trpc";
-import {getAuthenticationCookie,setAuthenticationCookie} from "../../utils/cookie";
+import {clearAuthenticationCookie,setAuthenticationCookie} from "../../utils/cookie";
 import {generatePath} from "../../utils/path-generator";
 import {createUserWithEmailAndPasswordInputModel, createUserWithEmailAndPasswordOutputModel,
     getLoggedInUserInfoInputModel,
     getLoggedInUserInfoOutputModel,
-    signInUserWithEmailAndPasswordInputModel, signInUserWithEmailAndPasswordOutputModel
+    signInUserWithEmailAndPasswordInputModel, signInUserWithEmailAndPasswordOutputModel,
+    signOutInputModel, signOutOutputModel
 } from "./model";
 
 const getPath = generatePath("/authentication")
@@ -28,6 +29,13 @@ export const authRouter = router({
             const {id,token} = await userService.signInUserWithEmailAndPassword({email,password})
             setAuthenticationCookie(ctx,token)
             return {id}
+        }),
+    signOut: authenticatedProcedure
+        .input(signOutInputModel)
+        .output(signOutOutputModel)
+        .mutation(({ctx}) => {
+            clearAuthenticationCookie(ctx)
+            return undefined
         }),
         
     getLoggedInUserInfo: authenticatedProcedure

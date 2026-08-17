@@ -17,15 +17,19 @@ class UserService {
     }
 
     private async generateUserToken(payload: GenerateUserTokenPayloadType) {
-        const {id}  = await generateUserTokenPayload.parseAsync(payload)
-        const token = jwt.sign({id},process.env.JWT_SECRET as string)
+        const {id} = await generateUserTokenPayload.parseAsync(payload)
+        const secret = process.env.JWT_SECRET
+        if (!secret) throw new Error("JWT_SECRET is not configured")
+        const token = jwt.sign({id}, secret)
         return {token}
     }
 
     private async verifyUserToken(token: string) :Promise<GenerateUserTokenPayloadType> {
         try{
-            const verificationResult = jwt.verify(token,process.env.JWT_SECRET as string)// as GenerateUserTokenPayloadType
-            return verificationResult as GenerateUserTokenPayloadType
+            const secret = process.env.JWT_SECRET
+            if (!secret) throw new Error("JWT_SECRET is not configured")
+            const verificationResult = jwt.verify(token, secret)
+            return await generateUserTokenPayload.parseAsync(verificationResult)
 
         }
         catch(err){
@@ -33,7 +37,7 @@ class UserService {
         }
 
     }
-    public async getUserInfoById(id: any) {
+    public async getUserInfoById(id: number) {
         const user = await db.select({
             id: users.id,
             email: users.email,
@@ -65,7 +69,7 @@ class UserService {
 
         if (!userInsertResult || userInsertResult.length === 0) throw new Error('Failed to create user')
         const userId = userInsertResult[0]!.id
-        const {token} = await this.generateUserToken({id: userId.toString()})
+        const {token} = await this.generateUserToken({id: userId})
         return {
             id: userId,
             token
@@ -78,7 +82,7 @@ class UserService {
         if (!existingUser.salt || !existingUser.password) throw new Error(`User with email ${email} does not have a password set`)
         const hash = await this.generateHash(existingUser.salt, password)
         if (hash !== existingUser.password) throw new Error(`Invalid password for user with email ${email}`)
-        const {token} = await this.generateUserToken({id: existingUser.id.toString()})
+        const {token} = await this.generateUserToken({id: existingUser.id})
         return {
             id: existingUser.id,
             token

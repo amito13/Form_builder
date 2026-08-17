@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/trpc/:path*",
-        destination: "http://localhost:8000/trpc/:path*",
+        destination: `${process.env.API_URL ?? "http://localhost:8000"}/trpc/:path*`,
       },
     ];
   },

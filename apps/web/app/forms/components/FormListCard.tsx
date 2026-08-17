@@ -23,37 +23,37 @@ export function FormListCard({ form }: { form: FormListItem }) {
     : null;
 
   return (
-    <article className="group rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-5 shadow-[0_10px_30px_rgba(15,23,42,0.06)] transition hover:-translate-y-0.5 hover:border-[var(--accent)]/40 hover:shadow-[0_18px_40px_rgba(37,99,235,0.08)]">
+    <article className="card interactive group rounded-3xl p-5 hover:-translate-y-0.5 hover:border-primary hover:shadow-[var(--shadow-md)]">
       <div className="flex items-start justify-between gap-4">
         <div className="min-w-0 flex-1">
-          <p className="mb-2 text-xs font-medium uppercase tracking-[0.14em] text-[var(--muted)]">
+          <p className="mb-2 text-xs font-medium uppercase tracking-[0.14em] text-text-muted">
             Form #{String(form.id)}
           </p>
-          <h2 className="truncate text-xl font-semibold text-[var(--foreground)]">
+          <h2 className="truncate text-xl font-semibold text-text-primary">
             {form.title}
           </h2>
         </div>
-        <span className="rounded-full border border-[var(--accent)]/20 bg-[var(--accent)]/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-[var(--accent)]">
+        <span className="rounded-full border border-primary/30 bg-primary/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-primary">
           Active
         </span>
       </div>
 
-      <p className="mt-4 line-clamp-2 text-sm text-[var(--muted)]">
+      <p className="mt-4 line-clamp-2 text-sm text-text-muted">
         {form.description || "No description yet."}
       </p>
 
-      <div className="mt-5 flex flex-wrap items-center justify-between gap-3 border-t border-[var(--border)] pt-4">
+      <div className="mt-5 flex flex-wrap items-center justify-between gap-3 border-t border-border pt-4">
         <div className="space-y-1">
-          <p className="text-xs text-[var(--muted)]">{summary}</p>
+          <p className="text-xs text-text-muted">{summary}</p>
           {createdSummary && (
-            <p className="font-mono text-[11px] tracking-[0.08em] text-[var(--muted)]">
+            <p className="font-mono text-[11px] tracking-[0.08em] text-text-muted">
               Created {createdSummary}
             </p>
           )}
         </div>
         <Link
           href="/"
-          className="inline-flex items-center justify-center rounded-xl bg-[var(--accent)] px-3.5 py-2 text-sm font-semibold text-[var(--accent-foreground)] transition hover:opacity-90"
+          className="btn-primary interactive px-3.5 py-2 text-sm"
         >
           Open builder
         </Link>

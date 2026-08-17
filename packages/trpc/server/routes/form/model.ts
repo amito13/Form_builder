@@ -1,8 +1,8 @@
 import {z} from 'zod';
 
 export const createFormInputModel = z.object({
-    title: z.string().max(55).describe('Title of the form'),
-    description: z.string().max(300).optional().describe('Description of the form'),
+    title: z.string().trim().min(1).max(55).describe('Title of the form'),
+    description: z.string().trim().max(300).optional().describe('Description of the form'),
 })
 
 export const createFormOutputModel = z.object({
@@ -33,7 +33,7 @@ const formFieldObject = z.object({
 })
 export const createFieldInputModel = z.object({
     formId: z.number().int().describe('ID of the form'),
-    label: z.string().max(100).describe('Display label for the field'),
+    label: z.string().trim().min(1).max(100).describe('Display label for the field'),
     type: fieldTypeEnum.describe('Type of the field'),
     description: z.string().optional(),
     placeholder: z.string().optional(),
@@ -48,7 +48,7 @@ export const createFieldOutputModel = z.object({
 
 export const updateFieldInputModel = z.object({
     fieldId: z.number().int().describe('ID of the field to update'),
-    label: z.string().max(100).optional(),
+    label: z.string().trim().min(1).max(100).optional(),
     type: fieldTypeEnum.optional(),
     description: z.string().optional(),
     placeholder: z.string().optional(),

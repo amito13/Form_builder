@@ -1,4 +1,4 @@
-import { initTRPC } from '@trpc/server';
+import { TRPCError, initTRPC } from '@trpc/server';
 import { getAuthenticationCookie } from './utils/cookie';
 import { userService } from './services';
 export const tRPCContext = initTRPC
@@ -9,13 +9,19 @@ export const publicProcedure = tRPCContext.procedure;
 export const authenticatedProcedure = tRPCContext.procedure.use(async (options) => {
     const { ctx } = options;
     const userToken = getAuthenticationCookie(ctx);
-    if (!userToken)
-        throw new Error(`user is not logged in`);
-    const { id, } = await userService.verifyAndDecodeUserToken(userToken);
-    return options.next({
-        ctx: {
-            ...ctx,
-            user: { id }
-        }
-    });
+    if (!userToken) {
+        throw new TRPCError({ code: "UNAUTHORIZED", message: "Sign in to continue." });
+    }
+    try {
+        const { id } = await userService.verifyAndDecodeUserToken(userToken);
+        return options.next({
+            ctx: {
+                ...ctx,
+                user: { id }
+            }
+        });
+    }
+    catch {
+        throw new TRPCError({ code: "UNAUTHORIZED", message: "Your session is invalid or has expired." });
+    }
 });

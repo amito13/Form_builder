@@ -61,7 +61,7 @@ class FormService{
             if (rows.length === 0) return null;
             
             const {id,title,description,createdBy,createdAt,updatedAt} = rows[0];
-            const fields = rows.map(row => row.field).filter(field => field !== null);
+            const fields = rows.flatMap((row) => (row.field ? [row.field] : []));
 
             return {
                 id,

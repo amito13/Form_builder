@@ -9,11 +9,23 @@ import {
     getFormSubmissionsInputModel, getFormSubmissionsOutputModel,
 } from "./model";
 import {z}  from "zod";
-import {authenticatedProcedure, publicProcedure, router} from "../../trpc";
+import { TRPCError } from "@trpc/server";
+import {authenticatedProcedure, router} from "../../trpc";
 import {generatePath} from "../../utils/path-generator";
 import {formFieldService, formService,formSubmissionService} from "../../services/index";
 
 const getPath = generatePath("/form");
+
+async function assertFormOwner(formId: number, userId: number) {
+    const form = await formService.getFormById({ formId });
+    if (!form) {
+        throw new TRPCError({ code: "NOT_FOUND", message: "Form not found." });
+    }
+    if (form.createdBy !== userId) {
+        throw new TRPCError({ code: "FORBIDDEN", message: "You do not have access to this form." });
+    }
+    return form;
+}
 
 export const formRouter = router({
     createForm: authenticatedProcedure
@@ -39,44 +51,52 @@ export const formRouter = router({
     getFields: authenticatedProcedure
         .input(getFieldsInputModel)
         .output(getFieldsOutputModel)
-        .query(async ({input}) => {
+        .query(async ({input, ctx}) => {
+            await assertFormOwner(input.formId, ctx.user.id)
             return formFieldService.getFields({formId: input.formId})
         }),
     createField: authenticatedProcedure
         .input(createFieldInputModel)
         .output(createFieldOutputModel)
-        .mutation(async ({input}) => {
+        .mutation(async ({input, ctx}) => {
+            await assertFormOwner(input.formId, ctx.user.id)
             return formFieldService.createField(input)
         }),
     updateField: authenticatedProcedure
         .input(updateFieldInputModel)
         .output(updateFieldOutputModel)
-        .mutation(async ({input}) => {
+        .mutation(async ({input, ctx}) => {
+            const fields = await formFieldService.getFieldsById(input.fieldId)
+            await assertFormOwner(fields.formId, ctx.user.id)
             return formFieldService.updateField(input)
         }),
     deleteField: authenticatedProcedure
         .input(deleteFieldInputModel)
         .output(deleteFieldOutputModel)
-        .mutation(async ({input}) => {
+        .mutation(async ({input, ctx}) => {
+            const fields = await formFieldService.getFieldsById(input.fieldId)
+            await assertFormOwner(fields.formId, ctx.user.id)
             return formFieldService.deleteField(input)
         }),
     getForm: authenticatedProcedure
         .input(getFormInputModel)
         .output(getFormOutputModel)
-        .query(async ({input}) => {
-            return formService.getFormById({formId: input.formId})
+        .query(async ({input, ctx}) => {
+            return assertFormOwner(input.formId, ctx.user.id)
         }),
-    submitForm: publicProcedure 
+    submitForm: authenticatedProcedure
         .input(submitFormInputModel)
         .output(submitFormOutputModel)
-        .mutation(async ({input}) => {
+        .mutation(async ({input, ctx}) => {
+            await assertFormOwner(input.formId, ctx.user.id)
             const result = await formSubmissionService.submitForm(input)
-            return { ...result, id: String(result.id) }//attenttion needed
+            return result
         }),
     getFormSubmissions: authenticatedProcedure
         .input(getFormSubmissionsInputModel)
         .output(getFormSubmissionsOutputModel)
-        .query(async ({input}) => {
+        .query(async ({input, ctx}) => {
+            await assertFormOwner(input.formId, ctx.user.id)
             return formSubmissionService.getFormSubmissions({formId: input.formId})
         })
     

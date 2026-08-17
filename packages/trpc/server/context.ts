@@ -2,7 +2,7 @@ import type {CreateExpressContextOptions} from '@trpc/server/adapters/express';
 import {createCookieFactory, getCookieFactory, clearCookieFactory} from './utils/cookie';
 
 export interface TRPCCtxUser{
-    id: any;
+    id: number;
 }
 
 export interface TRPCContext {

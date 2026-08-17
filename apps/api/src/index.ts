@@ -6,9 +6,19 @@ import {appRouter, createContext} from "@repo/trpc";
 
 const app = express();
 app.use(express.json());
+const allowedOrigins = (process.env.CORS_ORIGIN ?? "http://localhost:3000")
+    .split(",")
+    .map((origin) => origin.trim())
+    .filter(Boolean);
+
 app.use(cors({
-    //allowing all origins for development purposes, in production you should restrict this to your frontend domain
-    origin: "*"
+    origin(origin, callback) {
+        if (!origin || process.env.NODE_ENV !== "production" || allowedOrigins.includes(origin)) {
+            return callback(null, true);
+        }
+        return callback(new Error("Origin is not allowed by CORS"));
+    },
+    credentials: true,
 }));
 
 app.use("/trpc",createExpressMiddleware({
@@ -29,8 +39,8 @@ app.use("/trpc",createExpressMiddleware({
 //     return res.status(201).json({ message: "User created successfully" });
 // });
 
-app.listen(8000, () => {
-    console.log("Server is running on http://localhost:8000");
-}); 
+const port = Number(process.env.PORT ?? 8000);
 
-  
+app.listen(port, () => {
+    console.log(`Server is running on http://localhost:${port}`);
+});
