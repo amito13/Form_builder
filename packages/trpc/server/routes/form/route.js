@@ -1,7 +1,7 @@
 import { createFormInputModel, createFormOutputModel, listFormsOutputModel, createFieldInputModel, createFieldOutputModel, updateFieldInputModel, updateFieldOutputModel, deleteFieldInputModel, deleteFieldOutputModel, getFieldsInputModel, getFieldsOutputModel, getFormInputModel, getFormOutputModel, submitFormInputModel, submitFormOutputModel, getFormSubmissionsInputModel, getFormSubmissionsOutputModel, } from "./model";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
-import { authenticatedProcedure, router } from "../../trpc";
+import { authenticatedProcedure, publicProcedure, router } from "../../trpc";
 import { generatePath } from "../../utils/path-generator";
 import { formFieldService, formService, formSubmissionService } from "../../services/index";
 const getPath = generatePath("/form");
@@ -71,6 +71,12 @@ export const formRouter = router({
         .query(async ({ input, ctx }) => {
         return assertFormOwner(input.formId, ctx.user.id);
     }),
+    getPublicForm: publicProcedure
+        .input(getFormInputModel)
+        .output(getFormOutputModel)
+        .query(async ({ input }) => {
+        return formService.getFormById({ formId: input.formId });
+    }),
     submitForm: authenticatedProcedure
         .input(submitFormInputModel)
         .output(submitFormOutputModel)
@@ -78,6 +84,16 @@ export const formRouter = router({
         await assertFormOwner(input.formId, ctx.user.id);
         const result = await formSubmissionService.submitForm(input);
         return result;
+    }),
+    submitPublicForm: publicProcedure
+        .input(submitFormInputModel)
+        .output(submitFormOutputModel)
+        .mutation(async ({ input }) => {
+        const form = await formService.getFormById({ formId: input.formId });
+        if (!form) {
+            throw new TRPCError({ code: "NOT_FOUND", message: "Form not found." });
+        }
+        return formSubmissionService.submitForm(input);
     }),
     getFormSubmissions: authenticatedProcedure
         .input(getFormSubmissionsInputModel)

@@ -33,7 +33,7 @@ class FormSubmissionService {
             if (field.type === "EMAIL" && answer.value !== "" && !z.string().email().safeParse(answer.value).success) {
                 throw new Error(`\"${field.id}\" must be a valid email address`)
             }
-            if (field.type === "YES_NO" && answer.value !== "yes" && answer.value !== "no") {
+            if (field.type === "YES_NO" && answer.value !== "" && answer.value !== "yes" && answer.value !== "no") {
                 throw new Error(`\"${field.id}\" must be yes or no`)
             }
         }
