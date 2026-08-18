@@ -55,126 +55,126 @@ export default function FormsPage() {
     : "No updates yet";
 
   return (
-    <main className="min-h-screen bg-background px-4 py-8 text-foreground sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-6xl">
-        <header className="card mb-8 rounded-3xl p-6">
-          <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-            <div className="max-w-2xl">
-              <p className="text-xs font-medium uppercase tracking-[0.18em] text-text-muted">
-                Workspace index
-              </p>
-              <h1 className="mt-2 text-3xl font-semibold tracking-tight text-text-primary md:text-4xl">
-                Your forms
-              </h1>
-              <p className="mt-3 text-sm leading-6 text-text-muted md:text-base">
-                Scan the current library, open the right form, and keep active
-                work close at hand.
+    <main className="forms-page">
+      <section className="forms-hero" aria-label="Forms workspace overview">
+        <div className="auth-brand">
+          <span className="auth-brand-mark" aria-hidden="true">
+            F
+          </span>
+          <span>Formroom</span>
+        </div>
+
+        <div className="auth-intro-copy forms-hero-copy">
+          <p className="auth-kicker">Workspace index</p>
+          <h1>Your forms stay in view.</h1>
+          <p>
+            Review the latest work, reopen the right builder, and keep every
+            active draft inside the same calm space as your sign-in flow.
+          </p>
+        </div>
+
+        <div className="forms-hero-stats" aria-label="Forms summary">
+          <article className="forms-hero-stat">
+            <p>Forms</p>
+            <strong>{summary}</strong>
+          </article>
+          <article className="forms-hero-stat">
+            <p>Latest update</p>
+            <strong>{latestSummary}</strong>
+          </article>
+          <article className="forms-hero-stat">
+            <p>Visible</p>
+            <strong>{visibleSummary}</strong>
+          </article>
+        </div>
+
+        <div className="auth-note forms-hero-note">
+          <span className="auth-note-dot" aria-hidden="true" />
+          Ready to reopen your next conversation
+        </div>
+      </section>
+
+      <section className="forms-panel" aria-labelledby="forms-title">
+        <div className="forms-shell">
+          <header className="forms-shell-header">
+            <div className="forms-shell-copy">
+              <p className="auth-eyebrow">Your workspace</p>
+              <h2 id="forms-title">Browse and reopen forms</h2>
+              <p>
+                Search by title, description, or form ID and jump back into the
+                builder without leaving this shared theme.
               </p>
             </div>
 
-            <div className="flex items-center gap-3">
-              <Link
-                href="/"
-                className="btn-secondary interactive px-4 py-2.5 text-sm"
-              >
+            <div className="forms-shell-actions">
+              <Link href="/" className="btn-secondary interactive forms-action">
                 Builder
               </Link>
-              <Link
-                href="/"
-                className="btn-primary interactive px-4 py-2.5 text-sm"
-              >
+              <Link href="/" className="btn-primary interactive forms-action">
                 New form
               </Link>
             </div>
-          </div>
+          </header>
 
-          <div className="mt-6 grid gap-3 sm:grid-cols-3">
-            <div className="rounded-2xl border border-border bg-canvas px-4 py-3">
-              <p className="text-xs uppercase tracking-[0.16em] text-text-muted">
-                Forms
-              </p>
-              <p className="mt-2 font-mono text-xl font-semibold">{summary}</p>
-            </div>
-            <div className="rounded-2xl border border-border bg-canvas px-4 py-3">
-              <p className="text-xs uppercase tracking-[0.16em] text-text-muted">
-                Latest update
-              </p>
-              <p className="mt-2 font-mono text-xl font-semibold">
-                {latestSummary}
-              </p>
-            </div>
-            <div className="rounded-2xl border border-border bg-canvas px-4 py-3">
-              <p className="text-xs uppercase tracking-[0.16em] text-text-muted">
-                Visible
-              </p>
-              <p className="mt-2 font-mono text-xl font-semibold">
-                {visibleSummary}
-              </p>
-            </div>
-          </div>
-        </header>
+          <section className="forms-toolbar" aria-label="Search forms">
+            <label className="forms-search">
+              <span>Search</span>
+              <input
+                value={search}
+                onChange={(event) => setSearch(event.target.value)}
+                placeholder="Title, description, or form ID"
+                className="form-input forms-search-input"
+              />
+            </label>
+            <p className="forms-toolbar-note">
+              {search.trim()
+                ? "Showing matching forms only."
+                : "All forms from your workspace."}
+            </p>
+          </section>
 
-        <section className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <label className="card flex max-w-xl flex-1 items-center gap-3 rounded-2xl px-4 py-3">
-            <span className="text-sm text-text-muted">Search</span>
-            <input
-              value={search}
-              onChange={(event) => setSearch(event.target.value)}
-              placeholder="Title, description, or form ID"
-              className="w-full border-0 bg-transparent p-0 text-sm outline-none placeholder:text-text-muted"
-            />
-          </label>
-          <p className="text-sm text-text-muted">
-            {search.trim()
-              ? "Showing matching forms only."
-              : "All forms from your workspace."}
-          </p>
-        </section>
-
-        {formsQuery.isPending && (
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-            {Array.from({ length: 6 }).map((_, index) => (
-              <div
-                key={index}
-                className="card animate-pulse rounded-2xl p-5"
-              >
-                <div className="h-3 w-20 rounded-full bg-border" />
-                <div className="mt-4 h-7 w-3/4 rounded-lg bg-border" />
-                <div className="mt-4 h-4 w-full rounded-md bg-border" />
-                <div className="mt-2 h-4 w-2/3 rounded-md bg-border" />
-                <div className="mt-6 h-10 rounded-xl bg-border" />
-              </div>
-            ))}
-          </div>
-        )}
-
-        {formsQuery.isError && (
-          <div className="rounded-2xl border border-red-200 bg-red-50 p-5 text-sm text-red-700">
-            {formsQuery.error.message || "Unable to load forms."}
-          </div>
-        )}
-
-        {!formsQuery.isPending && !formsQuery.isError && forms.length === 0 && (
-          <FormListEmptyState />
-        )}
-
-        {!formsQuery.isPending &&
-          !formsQuery.isError &&
-          forms.length > 0 &&
-          filteredForms.length === 0 && (
-            <div className="card rounded-3xl border-dashed p-10 text-center text-sm text-text-muted">
-              No forms match “{search.trim()}”.
+          {formsQuery.isPending && (
+            <div className="forms-grid" aria-label="Loading forms">
+              {Array.from({ length: 6 }).map((_, index) => (
+                <div key={index} className="forms-skeleton-card">
+                  <div className="skeleton h-3 w-20" />
+                  <div className="skeleton mt-4 h-7 w-3/4" />
+                  <div className="skeleton mt-4 h-4 w-full" />
+                  <div className="skeleton mt-2 h-4 w-2/3" />
+                  <div className="skeleton mt-6 h-10" />
+                </div>
+              ))}
             </div>
           )}
 
-        {!formsQuery.isPending && !formsQuery.isError && filteredForms.length > 0 && (
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-            {filteredForms.map((form: FormListItem) => (
-              <FormListCard key={String(form.id)} form={form} />
-            ))}
-          </div>
-        )}
-      </div>
+          {formsQuery.isError && (
+            <div className="forms-feedback forms-feedback-error" role="alert">
+              {formsQuery.error.message || "Unable to load forms."}
+            </div>
+          )}
+
+          {!formsQuery.isPending && !formsQuery.isError && forms.length === 0 && (
+            <FormListEmptyState />
+          )}
+
+          {!formsQuery.isPending &&
+            !formsQuery.isError &&
+            forms.length > 0 &&
+            filteredForms.length === 0 && (
+              <div className="forms-feedback">No forms match “{search.trim()}”.</div>
+            )}
+
+          {!formsQuery.isPending &&
+            !formsQuery.isError &&
+            filteredForms.length > 0 && (
+              <div className="forms-grid">
+                {filteredForms.map((form: FormListItem) => (
+                  <FormListCard key={String(form.id)} form={form} />
+                ))}
+              </div>
+            )}
+        </div>
+      </section>
     </main>
   );
 }

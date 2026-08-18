@@ -23,38 +23,29 @@ export function FormListCard({ form }: { form: FormListItem }) {
     : null;
 
   return (
-    <article className="card interactive group rounded-3xl p-5 hover:-translate-y-0.5 hover:border-primary hover:shadow-[var(--shadow-md)]">
-      <div className="flex items-start justify-between gap-4">
-        <div className="min-w-0 flex-1">
-          <p className="mb-2 text-xs font-medium uppercase tracking-[0.14em] text-text-muted">
+    <article className="forms-card interactive">
+      <div className="forms-card-header">
+        <div className="forms-card-copy">
+          <p className="forms-card-id">
             Form #{String(form.id)}
           </p>
-          <h2 className="truncate text-xl font-semibold text-text-primary">
-            {form.title}
-          </h2>
+          <h2 className="forms-card-title">{form.title}</h2>
         </div>
-        <span className="rounded-full border border-primary/30 bg-primary/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-primary">
-          Active
-        </span>
+        <span className="forms-card-badge">Active</span>
       </div>
 
-      <p className="mt-4 line-clamp-2 text-sm text-text-muted">
-        {form.description || "No description yet."}
-      </p>
+      <p className="forms-card-description">{form.description || "No description yet."}</p>
 
-      <div className="mt-5 flex flex-wrap items-center justify-between gap-3 border-t border-border pt-4">
-        <div className="space-y-1">
-          <p className="text-xs text-text-muted">{summary}</p>
+      <div className="forms-card-footer">
+        <div className="forms-card-meta">
+          <p>{summary}</p>
           {createdSummary && (
-            <p className="font-mono text-[11px] tracking-[0.08em] text-text-muted">
+            <p className="forms-card-created">
               Created {createdSummary}
             </p>
           )}
         </div>
-        <Link
-          href="/"
-          className="btn-primary interactive px-3.5 py-2 text-sm"
-        >
+        <Link href="/" className="btn-primary interactive forms-card-link">
           Open builder
         </Link>
       </div>
