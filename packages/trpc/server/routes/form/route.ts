@@ -10,7 +10,7 @@ import {
 } from "./model";
 import {z}  from "zod";
 import { TRPCError } from "@trpc/server";
-import {authenticatedProcedure, publicProcedure, router} from "../../trpc";
+import {authenticatedProcedure, router} from "../../trpc";
 import {generatePath} from "../../utils/path-generator";
 import {formFieldService, formService,formSubmissionService} from "../../services/index";
 
@@ -84,24 +84,6 @@ export const formRouter = router({
         .query(async ({input, ctx}) => {
             return assertFormOwner(input.formId, ctx.user.id)
         }),
-    getFormByShareToken: authenticatedProcedure
-        .input(getFormByShareTokenInputModel)
-        .output(getFormOutputModel)
-        .query(async ({input, ctx}) => {
-            const form = await formService.getFormByShareToken(input.shareToken)
-            if (!form) throw new TRPCError({ code: "NOT_FOUND", message: "Form not found." })
-            if (form.createdBy !== ctx.user.id) throw new TRPCError({ code: "FORBIDDEN", message: "You do not have access to this form." })
-            return form
-        }),
-    getPublicForm: publicProcedure
-        .input(getFormByShareTokenInputModel)
-        .output(getPublicFormOutputModel)
-        .query(async ({input}) => {
-            const form = await formService.getFormByShareToken(input.shareToken)
-            if (!form) return null
-            const { shareToken: _shareToken, ...publicForm } = form
-            return publicForm
-        }),
     submitForm: authenticatedProcedure
         .input(submitFormInputModel)
         .output(submitFormOutputModel)
@@ -109,16 +91,6 @@ export const formRouter = router({
             await assertFormOwner(input.formId, ctx.user.id)
             const result = await formSubmissionService.submitForm(input)
             return result
-        }),
-    submitPublicForm: publicProcedure
-        .input(submitFormInputModel)
-        .output(submitFormOutputModel)
-        .mutation(async ({input}) => {
-            const form = await formService.getFormById({ formId: input.formId })
-            if (!form) {
-                throw new TRPCError({ code: "NOT_FOUND", message: "Form not found." })
-            }
-            return formSubmissionService.submitForm(input)
         }),
     getFormSubmissions: authenticatedProcedure
         .input(getFormSubmissionsInputModel)
