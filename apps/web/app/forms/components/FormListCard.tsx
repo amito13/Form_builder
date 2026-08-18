@@ -11,7 +11,7 @@ export function FormListCard({ form }: { form: FormListItem }) {
     : "Recently created";
 
   return (
-    <Link href={`/forms/${String(form.id)}`} className="forms-card forms-card-open">
+    <Link href={`/forms/${form.shareToken}`} className="forms-card forms-card-open">
       <div className="forms-card-topline"><span>Form #{String(form.id)}</span><span className="forms-card-status">Active</span></div>
       <h3 className="forms-card-title">{form.title}</h3>
       <p className="forms-card-description">{form.description || "No description yet."}</p>

@@ -12,6 +12,7 @@ export const createFormOutputModel = z.object({
 export const listFormsOutputModel = z.array(
     z.object({
         id: z.any().describe('ID of the form'),
+        shareToken: z.string().uuid().describe('Public-safe form token'),
         title: z.string().describe('Title of the form'),
         description: z.string().nullable().optional().describe('Description of the form'),
         createdAt: z.date().nullable().describe('Creation timestamp'),
@@ -77,14 +78,23 @@ export const getFormInputModel = z.object({
     formId: z.number().int().describe('ID of the form'),
 })
 
-export const getFormOutputModel = z.object({
+export const getFormByShareTokenInputModel = z.object({
+    shareToken: z.string().uuid(),
+})
+
+const formOutputModel = z.object({
     id: z.any(),
+    shareToken: z.string().uuid(),
     title: z.string(),
     description: z.string().nullable().optional(),
     createdAt: z.date().nullable(),
     updatedAt: z.date().nullable(),
     fields: z.array(formFieldObject),
-}).nullable()
+})
+
+export const getFormOutputModel = formOutputModel.nullable()
+
+export const getPublicFormOutputModel = formOutputModel.omit({ shareToken: true }).nullable()
 
 export const submitFormInputModel = z.object({
     formId: z.number().int().describe('ID of the form being submitted'),

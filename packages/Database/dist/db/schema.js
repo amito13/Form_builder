@@ -11,6 +11,7 @@ export const users = pgTable("users", {
 export const fieldTypeEnum = pgEnum('field_type_enum', ['TEXT', 'NUMBER', 'EMAIL', 'YES_NO', 'PASSWORD']);
 export const formsTable = pgTable("forms", {
     id: serial("id").primaryKey(),
+    shareToken: uuid("share_token").defaultRandom().notNull().unique(),
     title: varchar('title', { length: 55 }).notNull(),
     description: varchar('description', { length: 300 }),
     createdBy: integer('created_by').references(() => users.id),

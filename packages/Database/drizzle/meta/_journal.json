@@ -50,6 +50,13 @@
       "when": 1786544160083,
       "tag": "0006_spooky_mojo",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1787064314846,
+      "tag": "0007_giant_plazm",
+      "breakpoints": true
     }
   ]
 }

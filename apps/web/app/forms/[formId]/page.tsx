@@ -18,16 +18,19 @@ const fieldTypeLabels: Record<FieldType, string> = {
 
 export default function FormBuilderPage() {
   const params = useParams<{ formId: string }>();
-  const formId = useMemo(() => {
-    const value = Number(params.formId);
-    return Number.isInteger(value) && value > 0 ? value : 0;
-  }, [params.formId]);
+  const shareToken = useMemo(() => params.formId, [params.formId]);
   const utils = trpc.useUtils();
-  const formQuery = trpc.form.getForm.useQuery({ formId }, { enabled: formId > 0, retry: false });
+  const formQuery = trpc.form.getFormByShareToken.useQuery({ shareToken }, { enabled: Boolean(shareToken), retry: false });
   const [newFieldLabel, setNewFieldLabel] = useState("");
   const [newFieldType, setNewFieldType] = useState<FieldType>("TEXT");
   const [shareMessage, setShareMessage] = useState("");
-  const refreshForm = () => utils.form.getForm.invalidate({ formId });
+  const [showResponses, setShowResponses] = useState(false);
+  const refreshForm = () => utils.form.getFormByShareToken.invalidate({ shareToken });
+  const responseFormId = formQuery.data?.id ? Number(formQuery.data.id) : 0;
+  const responsesQuery = trpc.form.getFormSubmissions.useQuery(
+    { formId: responseFormId },
+    { enabled: showResponses && responseFormId > 0, retry: false },
+  );
   const createField = trpc.form.createField.useMutation({ onSuccess: () => { setNewFieldLabel(""); void refreshForm(); } });
   const updateField = trpc.form.updateField.useMutation({ onSuccess: () => { void refreshForm(); } });
   const deleteField = trpc.form.deleteField.useMutation({ onSuccess: () => { void refreshForm(); } });
@@ -35,11 +38,11 @@ export default function FormBuilderPage() {
   function addField(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!newFieldLabel.trim() || createField.isPending) return;
-    createField.mutate({ formId, label: newFieldLabel.trim(), type: newFieldType });
+    createField.mutate({ formId: formQuery.data?.id ? Number(formQuery.data.id) : 0, label: newFieldLabel.trim(), type: newFieldType });
   }
 
   async function copyShareLink() {
-    const shareLink = `${window.location.origin}/forms/respond/${formId}`;
+    const shareLink = `${window.location.origin}/forms/respond/${shareToken}`;
     try {
       await navigator.clipboard.writeText(shareLink);
       setShareMessage("Link copied");
@@ -48,7 +51,7 @@ export default function FormBuilderPage() {
     }
   }
 
-  if (!formId) return <BuilderFeedback title="Invalid form link" detail="Return to your workspace and choose a form to edit." />;
+  if (!shareToken) return <BuilderFeedback title="Invalid form link" detail="Return to your workspace and choose a form to edit." />;
   if (formQuery.isPending) return <BuilderFeedback title="Loading form…" detail="Getting your form ready to edit." />;
   if (formQuery.isError || !formQuery.data) return <BuilderFeedback title="Form unavailable" detail={formQuery.error?.message || "This form could not be found."} />;
 
@@ -59,7 +62,7 @@ export default function FormBuilderPage() {
     <main className="builder-page">
       <header className="builder-header">
         <Link href="/forms" className="new-form-back">← All forms</Link>
-        <div className="builder-heading"><div><p className="forms-section-label">Form builder</p><h1>{form.title}</h1><p>{form.description || "Add fields to begin collecting responses."}</p></div><div className="builder-heading-actions"><button type="button" className="btn-secondary builder-share-button" onClick={copyShareLink}>Share form <span aria-hidden="true">↗</span></button><span className="builder-field-count">{form.fields.length} {form.fields.length === 1 ? "field" : "fields"}</span></div></div>
+        <div className="builder-heading"><div><p className="forms-section-label">Form builder</p><h1>{form.title}</h1><p>{form.description || "Add fields to begin collecting responses."}</p></div><div className="builder-heading-actions"><button type="button" className="btn-secondary builder-share-button" onClick={copyShareLink}>Share form <span aria-hidden="true">↗</span></button><button type="button" className="btn-ghost builder-responses-button" onClick={() => setShowResponses((current) => !current)}>{showResponses ? "Hide responses" : "View responses"}</button><span className="builder-field-count">{form.fields.length} {form.fields.length === 1 ? "field" : "fields"}</span></div></div>
         {shareMessage && <p className="builder-share-message" role="status">{shareMessage}</p>}
       </header>
 
@@ -78,10 +81,16 @@ export default function FormBuilderPage() {
           <div className="builder-fields-heading"><div><p className="forms-section-label">Fields</p><h2 id="builder-fields-title">Your form</h2></div></div>
           {mutationError && <p className="new-form-error" role="alert">{mutationError.message || "Unable to save the field."}</p>}
           {form.fields.length === 0 ? <div className="builder-empty"><span aria-hidden="true">+</span><h3>Your form is empty</h3><p>Add the first field from the panel to the left.</p></div> : <div className="builder-field-list">{form.fields.map((field, index) => <EditableField key={String(field.id)} field={field} number={index + 1} isSaving={updateField.isPending || deleteField.isPending} onSave={(values) => updateField.mutate({ fieldId: Number(field.id), ...values })} onDelete={() => deleteField.mutate({ fieldId: Number(field.id) })} />)}</div>}
+          {showResponses && <ResponsesPanel fields={form.fields} isLoading={responsesQuery.isPending} error={responsesQuery.error?.message} responses={responsesQuery.data} />}
         </section>
       </section>
     </main>
   );
+}
+
+function ResponsesPanel({ fields, isLoading, error, responses }: { fields: Array<{ id: unknown; label: string; type: FieldType }>; isLoading: boolean; error?: string; responses?: Array<{ id?: unknown; createdAt: Date | string | null; values: Array<{ formFieldId: number; value: string }> | null }> }) {
+  const fieldsById = new Map(fields.map((field) => [Number(field.id), field]));
+  return <section className="builder-responses" aria-labelledby="responses-title"><div><p className="forms-section-label">Responses</p><h2 id="responses-title">Submitted answers</h2></div>{isLoading && <p className="builder-responses-note">Loading responses…</p>}{error && <p className="new-form-error" role="alert">{error}</p>}{!isLoading && !error && responses?.length === 0 && <p className="builder-responses-note">No responses have been submitted yet.</p>}{responses?.map((response, index) => <article key={String(response.id)} className="builder-response-card"><header><strong>Response {index + 1}</strong><span>{response.createdAt ? new Date(response.createdAt).toLocaleString() : "Just now"}</span></header><dl>{response.values?.map((answer) => { const field = fieldsById.get(answer.formFieldId); return <div key={answer.formFieldId}><dt>{field?.label || "Deleted field"}</dt><dd>{field?.type === "PASSWORD" ? "••••••••" : answer.value || "—"}</dd></div>; })}</dl></article>)}</section>;
 }
 
 type EditableFieldProps = {

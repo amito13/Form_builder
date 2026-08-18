@@ -25,6 +25,7 @@ class FormService{
         
         const forms = await db.select({
             id: formsTable.id,
+            shareToken: formsTable.shareToken,
             title: formsTable.title,
             description: formsTable.description,
             createdBy: formsTable.createdBy,
@@ -38,6 +39,7 @@ class FormService{
 
         const rows = await db.select({
             id: formsTable.id,
+            shareToken: formsTable.shareToken,
             title: formsTable.title,
             description: formsTable.description,
             createdBy: formsTable.createdBy,
@@ -60,11 +62,12 @@ class FormService{
 
             if (rows.length === 0) return null;
             
-            const {id,title,description,createdBy,createdAt,updatedAt} = rows[0];
+            const {id,shareToken,title,description,createdBy,createdAt,updatedAt} = rows[0];
             const fields = rows.flatMap((row) => (row.field ? [row.field] : []));
 
             return {
                 id,
+                shareToken,
                 title,
                 description,
                 createdBy,
@@ -73,6 +76,15 @@ class FormService{
                 fields
             }
 
+    }
+    public async getFormByShareToken(shareToken: string) {
+        const result = await db
+            .select({ id: formsTable.id })
+            .from(formsTable)
+            .where(eq(formsTable.shareToken, shareToken))
+
+        const formId = result[0]?.id
+        return formId ? this.getFormById({ formId }) : null
     }
 }
 export default FormService;

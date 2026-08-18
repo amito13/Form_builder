@@ -4,7 +4,7 @@ import {
     updateFieldInputModel, updateFieldOutputModel,
     deleteFieldInputModel, deleteFieldOutputModel,
     getFieldsInputModel, getFieldsOutputModel,
-    getFormInputModel, getFormOutputModel,
+    getFormInputModel, getFormOutputModel, getFormByShareTokenInputModel, getPublicFormOutputModel,
     submitFormInputModel, submitFormOutputModel,
     getFormSubmissionsInputModel, getFormSubmissionsOutputModel,
 } from "./model";
@@ -84,11 +84,23 @@ export const formRouter = router({
         .query(async ({input, ctx}) => {
             return assertFormOwner(input.formId, ctx.user.id)
         }),
-    getPublicForm: publicProcedure
-        .input(getFormInputModel)
+    getFormByShareToken: authenticatedProcedure
+        .input(getFormByShareTokenInputModel)
         .output(getFormOutputModel)
+        .query(async ({input, ctx}) => {
+            const form = await formService.getFormByShareToken(input.shareToken)
+            if (!form) throw new TRPCError({ code: "NOT_FOUND", message: "Form not found." })
+            if (form.createdBy !== ctx.user.id) throw new TRPCError({ code: "FORBIDDEN", message: "You do not have access to this form." })
+            return form
+        }),
+    getPublicForm: publicProcedure
+        .input(getFormByShareTokenInputModel)
+        .output(getPublicFormOutputModel)
         .query(async ({input}) => {
-            return formService.getFormById({ formId: input.formId })
+            const form = await formService.getFormByShareToken(input.shareToken)
+            if (!form) return null
+            const { shareToken: _shareToken, ...publicForm } = form
+            return publicForm
         }),
     submitForm: authenticatedProcedure
         .input(submitFormInputModel)

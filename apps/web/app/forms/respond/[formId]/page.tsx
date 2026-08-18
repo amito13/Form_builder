@@ -8,16 +8,13 @@ type FieldType = "TEXT" | "NUMBER" | "EMAIL" | "YES_NO" | "PASSWORD";
 
 export default function PublicFormPage() {
   const params = useParams<{ formId: string }>();
-  const formId = useMemo(() => {
-    const value = Number(params.formId);
-    return Number.isInteger(value) && value > 0 ? value : 0;
-  }, [params.formId]);
+  const shareToken = useMemo(() => params.formId, [params.formId]);
   const [values, setValues] = useState<Record<string, string>>({});
   const [isComplete, setIsComplete] = useState(false);
-  const formQuery = trpc.form.getPublicForm.useQuery({ formId }, { enabled: formId > 0, retry: false });
+  const formQuery = trpc.form.getPublicForm.useQuery({ shareToken }, { enabled: Boolean(shareToken), retry: false });
   const submitForm = trpc.form.submitPublicForm.useMutation({ onSuccess: () => setIsComplete(true) });
 
-  if (!formId) return <PublicFeedback title="Invalid form link" detail="Check the link and try again." />;
+  if (!shareToken) return <PublicFeedback title="Invalid form link" detail="Check the link and try again." />;
   if (formQuery.isPending) return <PublicFeedback title="Loading form…" detail="One moment while we prepare it." />;
   if (formQuery.isError || !formQuery.data) return <PublicFeedback title="Form unavailable" detail={formQuery.error?.message || "This form may no longer be available."} />;
   if (isComplete) return <PublicFeedback title="Thank you" detail="Your response has been recorded." />;
@@ -26,7 +23,7 @@ export default function PublicFormPage() {
   function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (submitForm.isPending) return;
-    submitForm.mutate({ formId, values: form.fields.map((field) => ({ formFieldId: Number(field.id), value: values[String(field.id)] || "" })) });
+    submitForm.mutate({ formId: Number(form.id), values: form.fields.map((field) => ({ formFieldId: Number(field.id), value: values[String(field.id)] || "" })) });
   }
 
   return <main className="public-form-page"><section className="public-form-shell">

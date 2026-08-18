@@ -152,6 +152,23 @@ export declare const formsTable: import("drizzle-orm/pg-core").PgTableWithColumn
             identity: undefined;
             generated: undefined;
         }, {}, {}>;
+        shareToken: import("drizzle-orm/pg-core").PgColumn<{
+            name: "share_token";
+            tableName: "forms";
+            dataType: "string";
+            columnType: "PgUUID";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: true;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
         title: import("drizzle-orm/pg-core").PgColumn<{
             name: "title";
             tableName: "forms";
