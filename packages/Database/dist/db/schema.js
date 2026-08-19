@@ -27,13 +27,13 @@ export const formFieldsTable = pgTable("form_fields", {
     isRequired: boolean('is_required').default(false).notNull(),
     index: numeric('index', { scale: 2 }).notNull(),
     type: fieldTypeEnum('type').notNull(),
-    formId: serial('form_id').references(() => formsTable.id),
+    formId: integer('form_id').references(() => formsTable.id),
     createdAt: timestamp("created_at").defaultNow(),
     updatedAt: timestamp("updated_at").$onUpdate(() => new Date()),
 });
 export const formSubmissionsTable = pgTable("form_submissions", {
     id: serial("id").primaryKey(),
-    formId: serial('form_id').references(() => formsTable.id),
+    formId: integer('form_id').references(() => formsTable.id),
     values: json('values').$type().notNull(),
     createdAt: timestamp("created_at").defaultNow(),
     updatedAt: timestamp("updated_at").$onUpdate(() => new Date()),

@@ -80,7 +80,7 @@ export default function FormBuilderPage() {
         <section className="builder-fields" aria-labelledby="builder-fields-title">
           <div className="builder-fields-heading"><div><p className="forms-section-label">Fields</p><h2 id="builder-fields-title">Your form</h2></div></div>
           {mutationError && <p className="new-form-error" role="alert">{mutationError.message || "Unable to save the field."}</p>}
-          {form.fields.length === 0 ? <div className="builder-empty"><span aria-hidden="true">+</span><h3>Your form is empty</h3><p>Add the first field from the panel to the left.</p></div> : <div className="builder-field-list">{form.fields.map((field, index) => <EditableField key={String(field.id)} field={field} number={index + 1} isSaving={updateField.isPending || deleteField.isPending} onSave={(values) => updateField.mutate({ fieldId: Number(field.id), ...values })} onDelete={() => deleteField.mutate({ fieldId: Number(field.id) })} />)}</div>}
+          {form.fields.length === 0 ? <div className="builder-empty"><span aria-hidden="true">+</span><h3>Your form is empty</h3><p>Add the first field from the panel to the left.</p></div> : <div className="builder-field-list">{form.fields.map((field: typeof form.fields[number], index: number) => <EditableField key={String(field.id)} field={field} number={index + 1} isSaving={updateField.isPending || deleteField.isPending} onSave={(values) => updateField.mutate({ fieldId: Number(field.id), ...values })} onDelete={() => deleteField.mutate({ fieldId: Number(field.id) })} />)}</div>}
           {showResponses && <ResponsesPanel fields={form.fields} isLoading={responsesQuery.isPending} error={responsesQuery.error?.message} responses={responsesQuery.data} />}
         </section>
       </section>
@@ -109,8 +109,12 @@ function EditableField({ field, number, isSaving, onSave, onDelete }: EditableFi
   const [placeholder, setPlaceholder] = useState(field.placeholder || "");
   const [isRequired, setIsRequired] = useState(field.isRequired);
 
-  function cancel() { setLabel(field.label); setType(field.type); setDescription(field.description || ""); setPlaceholder(field.placeholder || ""); setIsRequired(field.isRequired); setIsEditing(false); }
-  function save() { if (!label.trim() || isSaving) return; onSave({ label: label.trim(), type, description: description.trim(), placeholder: placeholder.trim(), isRequired }); setIsEditing(false); }
+  function cancel() { setLabel(field.label); 
+    setType(field.type); setDescription(field.description || ""); 
+    setPlaceholder(field.placeholder || "");
+    setIsRequired(field.isRequired); setIsEditing(false); }
+  function save() { if (!label.trim() || isSaving) return; 
+    onSave({ label: label.trim(), type, description: description.trim(), placeholder: placeholder.trim(), isRequired }); setIsEditing(false); }
 
   return <article className="builder-field-card">
     <div className="builder-field-topline"><span>Field {number}</span><span>{fieldTypeLabels[field.type]}</span></div>

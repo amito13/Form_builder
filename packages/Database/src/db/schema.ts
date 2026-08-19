@@ -41,7 +41,7 @@ export const formFieldsTable = pgTable("form_fields", {
 
   type: fieldTypeEnum('type').notNull(),
 
-  formId: serial('form_id').references(() => formsTable.id),
+  formId: integer('form_id').references(() => formsTable.id),
 
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").$onUpdate(() => new Date()),
@@ -54,7 +54,7 @@ export type FormSubmissionValueRow = FormSubmissionValue[]
 
 export const formSubmissionsTable = pgTable("form_submissions", {
   id: serial("id").primaryKey(),
-  formId: serial('form_id').references(() => formsTable.id),
+  formId: integer('form_id').references(() => formsTable.id),
   values: json('values').$type<FormSubmissionValueRow>().notNull(),
 
   createdAt: timestamp("created_at").defaultNow(),

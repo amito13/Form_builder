@@ -21,18 +21,23 @@ class FormService{
         return {id: result[0].id};
     }
     public async listFormsByUserId(payload: ListFormByUserIdInputType) {
-        const { userId } = await listFormByUserIdInput.parseAsync(payload);
-        
-        const forms = await db.select({
-            id: formsTable.id,
-            shareToken: formsTable.shareToken,
-            title: formsTable.title,
-            description: formsTable.description,
-            createdBy: formsTable.createdBy,
-            createdAt: formsTable.createdAt,
-            updatedAt: formsTable.updatedAt
-        }).from(formsTable).where(eq(formsTable.createdBy, userId));
-        return forms;
+        try {
+            const { userId } = await listFormByUserIdInput.parseAsync(payload);
+            
+            const forms = await db.select({
+                id: formsTable.id,
+                shareToken: formsTable.shareToken,
+                title: formsTable.title,
+                description: formsTable.description,
+                createdBy: formsTable.createdBy,
+                createdAt: formsTable.createdAt,
+                updatedAt: formsTable.updatedAt
+            }).from(formsTable).where(eq(formsTable.createdBy, userId));
+            return forms;
+        } catch (error) {
+            console.error("[FormService.listFormsByUserId] Error:", error);
+            throw error;
+        }
     }
     public async getFormById(payload: GetFormByIdInputType) {
         const { formId } = await getFormByIdInput.parseAsync(payload);

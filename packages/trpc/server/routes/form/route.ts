@@ -10,7 +10,7 @@ import {
 } from "./model";
 import {z}  from "zod";
 import { TRPCError } from "@trpc/server";
-import {authenticatedProcedure, router} from "../../trpc";
+import {authenticatedProcedure, publicProcedure, router} from "../../trpc";
 import {generatePath} from "../../utils/path-generator";
 import {formFieldService, formService,formSubmissionService} from "../../services/index";
 
@@ -44,8 +44,13 @@ export const formRouter = router({
         .input(z.undefined())
         .output(listFormsOutputModel)
         .query(async ({ctx}) => {
-            const forms = await formService.listFormsByUserId({ userId: ctx.user.id });//check if user is authenticated and get the forms created by the user
-            return forms
+            try {
+                const forms = await formService.listFormsByUserId({ userId: ctx.user.id });
+                return forms;
+            } catch (error) {
+                console.error("[FormRouter.listForms] Error fetching forms for user", ctx.user.id, ":", error);
+                throw error;
+            }
         }),
     
     getFields: authenticatedProcedure
@@ -98,6 +103,35 @@ export const formRouter = router({
         .query(async ({input, ctx}) => {
             await assertFormOwner(input.formId, ctx.user.id)
             return formSubmissionService.getFormSubmissions({formId: input.formId})
-        })
-    
+        }),
+    getFormByShareToken: authenticatedProcedure
+        .input(getFormByShareTokenInputModel)
+        .output(getFormOutputModel)
+        .query(async ({input, ctx}) => {
+            const form = await formService.getFormByShareToken(input.shareToken)
+            if (!form) {
+                throw new TRPCError({ code: "NOT_FOUND", message: "Form not found." });
+            }
+            if (form.createdBy !== ctx.user.id) {
+                throw new TRPCError({ code: "FORBIDDEN", message: "You do not have access to this form." });
+            }
+            return form
+        }),
+    getPublicForm: publicProcedure
+        .input(getFormByShareTokenInputModel)
+        .output(getPublicFormOutputModel)
+        .query(async ({input}) => {
+            const form = await formService.getFormByShareToken(input.shareToken)
+            if (!form) {
+                throw new TRPCError({ code: "NOT_FOUND", message: "Form not found." });
+            }
+            return form
+        }),
+    submitPublicForm: publicProcedure
+        .input(submitFormInputModel)
+        .output(submitFormOutputModel)
+        .mutation(async ({input}) => {
+            const result = await formSubmissionService.submitForm(input)
+            return result
+        }),
 })

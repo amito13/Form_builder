@@ -23,12 +23,12 @@ export default function PublicFormPage() {
   function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (submitForm.isPending) return;
-    submitForm.mutate({ formId: Number(form.id), values: form.fields.map((field) => ({ formFieldId: Number(field.id), value: values[String(field.id)] || "" })) });
+    submitForm.mutate({ formId: Number(form.id), values: form.fields.map((field: any) => ({ formFieldId: Number(field.id), value: values[String(field.id)] || "" })) });
   }
 
   return <main className="public-form-page"><section className="public-form-shell">
     <header className="public-form-heading"><span className="forms-brand-mark" aria-hidden="true">F</span><p className="forms-section-label">Shared with you</p><h1>{form.title}</h1>{form.description && <p>{form.description}</p>}</header>
-    {form.fields.length === 0 ? <PublicFeedback title="This form is not ready yet" detail="The form owner has not added any questions." embedded /> : <form className="public-form-card" onSubmit={submit}>{form.fields.map((field) => <ResponseField key={String(field.id)} field={field} value={values[String(field.id)] || ""} onChange={(value) => setValues((current) => ({ ...current, [String(field.id)]: value }))} />)}{submitForm.error && <p className="new-form-error" role="alert">{submitForm.error.message || "Unable to submit your response."}</p>}<button className="btn-primary public-form-submit" type="submit" disabled={submitForm.isPending}>{submitForm.isPending ? "Sending response…" : "Submit response"} <span aria-hidden="true">→</span></button></form>}
+    {form.fields.length === 0 ? <PublicFeedback title="This form is not ready yet" detail="The form owner has not added any questions." embedded /> : <form className="public-form-card" onSubmit={submit}>{form.fields.map((field: any) => <ResponseField key={String(field.id)} field={field} value={values[String(field.id)] || ""} onChange={(value) => setValues((current) => ({ ...current, [String(field.id)]: value }))} />)}{submitForm.error && <p className="new-form-error" role="alert">{submitForm.error.message || "Unable to submit your response."}</p>}<button className="btn-primary public-form-submit" type="submit" disabled={submitForm.isPending}>{submitForm.isPending ? "Sending response…" : "Submit response"} <span aria-hidden="true">→</span></button></form>}
   </section></main>;
 }
 

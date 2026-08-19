@@ -10,7 +10,7 @@ import { FormListEmptyState } from "./components/FormListEmptyState";
 
 type FormListItem = inferRouterOutputs<AppRouter>["form"]["listForms"][number];
 
-function formatDate(value: Date | null | undefined) {
+function formatDate(value: Date | string | null | undefined) {
   if (!value) return "Not updated yet";
   return new Date(value).toLocaleDateString(undefined, {
     month: "short", day: "numeric", year: "numeric",
