@@ -33,12 +33,12 @@ export const formRouter = router({
         .output(createFormOutputModel)
         .mutation(async ({input, ctx}) => {
             const {title, description} = input;
-            const {id} = await formService.createForm({
+            const {id, shareToken} = await formService.createForm({
                 title,
                 description,
                 createdBy: ctx.user.id,
             })
-            return {id}
+            return {id: shareToken}
         }),
     listForms: authenticatedProcedure
         .input(z.undefined())

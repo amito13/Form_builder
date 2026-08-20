@@ -45,7 +45,7 @@ export default function FormsPage() {
           <span className="forms-brand-mark" aria-hidden="true">F</span><span>Formroom</span>
         </Link>
         <nav className="forms-sidebar-nav" aria-label="Forms actions">
-          <Link href="/" className="forms-sidebar-action forms-sidebar-action-primary"><span aria-hidden="true">+</span>Create new form</Link>
+          <Link href="/forms/new" className="forms-sidebar-action forms-sidebar-action-primary"><span aria-hidden="true">+</span>Create new form</Link>
           <a href="#forms-grid" className="forms-sidebar-action"><span aria-hidden="true">↗</span>Responses</a>
         </nav>
         <div className="forms-user">
