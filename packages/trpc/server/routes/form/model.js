@@ -55,6 +55,18 @@ export const deleteFieldInputModel = z.object({
 export const deleteFieldOutputModel = z.object({
     id: z.any(),
 });
+export const deleteFormInputModel = z.object({
+    formId: z.number().int().describe('ID of the form to delete'),
+});
+export const deleteFormOutputModel = z.object({
+    id: z.any(),
+});
+export const deleteFormInputModel = z.object({
+    formId: z.number().int().describe('ID of the form to delete'),
+});
+export const deleteFormOutputModel = z.object({
+    id: z.any(),
+});
 export const getFieldsInputModel = z.object({
     formId: z.number().int().describe('ID of the form'),
 });

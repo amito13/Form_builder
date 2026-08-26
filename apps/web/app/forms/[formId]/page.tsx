@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { trpc } from "@/trpc/trpc";
 
 const fieldTypes = ["TEXT", "NUMBER", "EMAIL", "YES_NO", "PASSWORD"] as const;
@@ -18,6 +18,7 @@ const fieldTypeLabels: Record<FieldType, string> = {
 
 export default function FormBuilderPage() {
   const params = useParams<{ formId: string }>();
+  const router = useRouter();
   const shareToken = useMemo(() => params.formId, [params.formId]);
   const utils = trpc.useUtils();
   const formQuery = trpc.form.getFormByShareToken.useQuery({ shareToken }, { enabled: Boolean(shareToken), retry: false });
@@ -34,6 +35,12 @@ export default function FormBuilderPage() {
   const createField = trpc.form.createField.useMutation({ onSuccess: () => { setNewFieldLabel(""); void refreshForm(); } });
   const updateField = trpc.form.updateField.useMutation({ onSuccess: () => { void refreshForm(); } });
   const deleteField = trpc.form.deleteField.useMutation({ onSuccess: () => { void refreshForm(); } });
+  const deleteForm = trpc.form.deleteForm.useMutation({
+    onSuccess: async () => {
+      await utils.form.listForms.invalidate();
+      await router.push("/forms");
+    },
+  });
 
   function addField(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -51,18 +58,25 @@ export default function FormBuilderPage() {
     }
   }
 
+  function handleDeleteForm() {
+    if (!formQuery.data?.id || deleteForm.isPending) return;
+    const confirmed = window.confirm("Delete this form and all its fields? This action cannot be undone.");
+    if (!confirmed) return;
+    deleteForm.mutate({ formId: Number(formQuery.data.id) });
+  }
+
   if (!shareToken) return <BuilderFeedback title="Invalid form link" detail="Return to your workspace and choose a form to edit." />;
   if (formQuery.isPending) return <BuilderFeedback title="Loading form…" detail="Getting your form ready to edit." />;
   if (formQuery.isError || !formQuery.data) return <BuilderFeedback title="Form unavailable" detail={formQuery.error?.message || "This form could not be found."} />;
 
   const form = formQuery.data;
-  const mutationError = createField.error || updateField.error || deleteField.error;
+  const mutationError = createField.error || updateField.error || deleteField.error || deleteForm.error;
 
   return (
     <main className="builder-page">
       <header className="builder-header">
         <Link href="/forms" className="new-form-back">← All forms</Link>
-        <div className="builder-heading"><div><p className="forms-section-label">Form builder</p><h1>{form.title}</h1><p>{form.description || "Add fields to begin collecting responses."}</p></div><div className="builder-heading-actions"><button type="button" className="btn-secondary builder-share-button" onClick={copyShareLink}>Share form <span aria-hidden="true">↗</span></button><button type="button" className="btn-ghost builder-responses-button" onClick={() => setShowResponses((current) => !current)}>{showResponses ? "Hide responses" : "View responses"}</button><span className="builder-field-count">{form.fields.length} {form.fields.length === 1 ? "field" : "fields"}</span></div></div>
+        <div className="builder-heading"><div><p className="forms-section-label">Form builder</p><h1>{form.title}</h1><p>{form.description || "Add fields to begin collecting responses."}</p></div><div className="builder-heading-actions"><button type="button" className="btn-secondary builder-share-button" onClick={copyShareLink}>Share form <span aria-hidden="true">↗</span></button><button type="button" className="btn-ghost builder-responses-button" onClick={() => setShowResponses((current) => !current)}>{showResponses ? "Hide responses" : "View responses"}</button><button type="button" className="builder-delete-form-button" onClick={handleDeleteForm} disabled={deleteForm.isPending}>{deleteForm.isPending ? "Deleting..." : "Delete form"}</button><span className="builder-field-count">{form.fields.length} {form.fields.length === 1 ? "field" : "fields"}</span></div></div>
         {shareMessage && <p className="builder-share-message" role="status">{shareMessage}</p>}
       </header>
 

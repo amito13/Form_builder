@@ -1,7 +1,7 @@
 import {asc, db,eq} from "@repo/database";
 // import { eq } from "drizzle-orm";
 import {formsTable,formFieldsTable} from "@repo/database"
-import { CreateFormInputType,createFormInput ,GetFormByIdInputType,ListFormByUserIdInputType,listFormByUserIdInput, getFormByIdInput} from "./model";
+import { CreateFormInputType,createFormInput ,DeleteFormByIdInputType,GetFormByIdInputType,ListFormByUserIdInputType,listFormByUserIdInput, deleteFormByIdInput, getFormByIdInput} from "./model";
 
 class FormService{
 
@@ -91,6 +91,21 @@ class FormService{
 
         const formId = result[0]?.id
         return formId ? this.getFormById({ formId }) : null
+    }
+
+    public async deleteFormById(payload: DeleteFormByIdInputType) {
+        const { formId } = await deleteFormByIdInput.parseAsync(payload);
+
+        const result = await db
+            .delete(formsTable)
+            .where(eq(formsTable.id, formId))
+            .returning({ id: formsTable.id });
+
+        if (!result || result.length === 0 || !result[0]?.id) {
+            throw new Error(`Failed to delete form with ID ${formId}`);
+        }
+
+        return { id: result[0].id };
     }
 }
 export default FormService;

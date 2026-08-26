@@ -40,6 +40,12 @@ export default function FormManagementPage() {
     { enabled: formId > 0 && activeTab === "responses", retry: false }
   );
 
+  const deleteForm = trpc.form.deleteForm.useMutation({
+    onSuccess: () => {
+      void router.push("/forms");
+    },
+  });
+
   const form = formQuery.data;
 
   // Initialize edit fields when form loads
@@ -60,6 +66,15 @@ export default function FormManagementPage() {
     } catch {
       alert("Could not copy link");
     }
+  };
+
+  const handleDeleteForm = () => {
+    if (!form?.id || deleteForm.isPending) return;
+    const confirmed = window.confirm(
+      "Delete this form and all its fields? This action cannot be undone."
+    );
+    if (!confirmed) return;
+    deleteForm.mutate({ formId: Number(form.id) });
   };
 
   if (!formId || formId <= 0) {
@@ -140,6 +155,14 @@ export default function FormManagementPage() {
           >
             Preview form <span>→</span>
           </Link>
+          <button
+            className="form-management-delete-button"
+            onClick={handleDeleteForm}
+            title="Delete form"
+            disabled={deleteForm.isPending}
+          >
+            {deleteForm.isPending ? "Deleting..." : "Delete form"}
+          </button>
         </div>
       </header>
 
@@ -241,7 +264,10 @@ export default function FormManagementPage() {
                   ))}
                 </ul>
               )}
-              <Link href={`/forms/${form.shareToken}`} className="btn-secondary">
+              <Link
+                href={`/forms/${form.shareToken}`}
+                className="btn-primary form-overview-fields-action"
+              >
                 Edit form fields →
               </Link>
             </div>

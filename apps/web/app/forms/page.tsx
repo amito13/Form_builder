@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import type { AppRouter } from "@repo/trpc";
 import { inferRouterOutputs } from "@trpc/server";
 import Link from "next/link";
@@ -19,8 +19,28 @@ function formatDate(value: Date | string | null | undefined) {
 
 export default function FormsPage() {
   const [search, setSearch] = useState("");
+  const [theme, setTheme] = useState<"light" | "dark">("dark");
   const formsQuery = trpc.form.listForms.useQuery(undefined, { retry: false });
   const userQuery = trpc.auth.getLoggedInUserInfo.useQuery(undefined, { retry: false });
+  
+  // Initialize theme from localStorage
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme") as "light" | "dark" | null;
+    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const initialTheme = savedTheme || (prefersDark ? "dark" : "light");
+    setTheme(initialTheme);
+    document.documentElement.setAttribute("data-theme", initialTheme);
+  }, []);
+
+  // Toggle theme and persist to localStorage
+  const toggleTheme = () => {
+    setTheme((prev) => {
+      const newTheme = prev === "dark" ? "light" : "dark";
+      document.documentElement.setAttribute("data-theme", newTheme);
+      localStorage.setItem("theme", newTheme);
+      return newTheme;
+    });
+  };
   const forms = useMemo(() => formsQuery.data ?? [], [formsQuery.data]);
   const mostRecentForm = useMemo(() => forms.reduce<FormListItem | null>((latest, form) => {
     const latestTime = latest?.updatedAt ? new Date(latest.updatedAt).getTime() : -Infinity;
@@ -48,6 +68,17 @@ export default function FormsPage() {
           <Link href="/forms/new" className="forms-sidebar-action forms-sidebar-action-primary"><span aria-hidden="true">+</span>Create new form</Link>
           <a href="#forms-grid" className="forms-sidebar-action"><span aria-hidden="true">↗</span>Responses</a>
         </nav>
+        
+        <button
+          onClick={toggleTheme}
+          className="forms-theme-toggle"
+          aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
+          title={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
+        >
+          <span className="forms-theme-toggle-icon">{theme === "dark" ? "☀️" : "🌙"}</span>
+          <span className="forms-theme-toggle-label">{theme === "dark" ? "Light" : "Dark"}</span>
+        </button>
+        
         <div className="forms-user">
           <div className="forms-user-avatar" aria-hidden="true">{initial}</div>
           <div className="forms-user-copy"><strong>{userName}</strong><span>{userQuery.data?.email || "Loading account…"}</span></div>

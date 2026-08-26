@@ -3,6 +3,7 @@ import {
     createFieldInputModel, createFieldOutputModel,
     updateFieldInputModel, updateFieldOutputModel,
     deleteFieldInputModel, deleteFieldOutputModel,
+    deleteFormInputModel, deleteFormOutputModel,
     getFieldsInputModel, getFieldsOutputModel,
     getFormInputModel, getFormOutputModel, getFormByShareTokenInputModel, getPublicFormOutputModel,
     submitFormInputModel, submitFormOutputModel,
@@ -82,6 +83,13 @@ export const formRouter = router({
             const fields = await formFieldService.getFieldsById(input.fieldId)
             await assertFormOwner(fields.formId, ctx.user.id)
             return formFieldService.deleteField(input)
+        }),
+    deleteForm: authenticatedProcedure
+        .input(deleteFormInputModel)
+        .output(deleteFormOutputModel)
+        .mutation(async ({ input, ctx }) => {
+            await assertFormOwner(input.formId, ctx.user.id)
+            return formService.deleteFormById({ formId: input.formId })
         }),
     getForm: authenticatedProcedure
         .input(getFormInputModel)

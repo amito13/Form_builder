@@ -24,8 +24,13 @@ export const getFormByIdInput = z.object({
     formId: z.any().describe("Form ID"),
 });
 
+export const deleteFormByIdInput = z.object({
+    formId: z.any().describe("Form ID"),
+});
+
 
 export type GetFormByIdInputType = z.infer<typeof getFormByIdInput>;
+export type DeleteFormByIdInputType = z.infer<typeof deleteFormByIdInput>;
 // export interface GetFormByIdInputType {
 //     formId: string;
 // }
