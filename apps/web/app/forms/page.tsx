@@ -55,13 +55,43 @@ export default function FormsPage() {
       </aside>
 
       <section className="forms-workspace" aria-labelledby="forms-title">
-        <header className="forms-recent-panel">
-          <div>
-            <p className="forms-section-label">Previous form</p>
-            <h1 id="forms-title">{mostRecentForm ? mostRecentForm.title : "No form selected"}</h1>
-            <p>{mostRecentForm ? mostRecentForm.description || "Continue shaping your latest form." : "Create a form to begin collecting thoughtful responses."}</p>
+        <header className="forms-hero-section">
+          <div className="forms-hero-content">
+            <div className="forms-hero-badge">✨ Welcome to Formroom</div>
+            <h1 className="forms-hero-title">Collect feedback effortlessly</h1>
+            <p className="forms-hero-subtitle">Create beautiful forms, gather responses, and understand your audience better. All in one place.</p>
+            
+            <div className="forms-features-grid">
+              <div className="forms-feature-item">
+                <div className="forms-feature-icon">📋</div>
+                <div className="forms-feature-text">
+                  <strong>Easy Creation</strong>
+                  <span>Build forms in minutes with our intuitive builder</span>
+                </div>
+              </div>
+              <div className="forms-feature-item">
+                <div className="forms-feature-icon">📊</div>
+                <div className="forms-feature-text">
+                  <strong>Smart Analytics</strong>
+                  <span>Visualize and analyze responses in real-time</span>
+                </div>
+              </div>
+              <div className="forms-feature-item">
+                <div className="forms-feature-icon">🔗</div>
+                <div className="forms-feature-text">
+                  <strong>Easy Sharing</strong>
+                  <span>Share your forms via link, email, or social media</span>
+                </div>
+              </div>
+              <div className="forms-feature-item">
+                <div className="forms-feature-icon">🔒</div>
+                <div className="forms-feature-text">
+                  <strong>Secure & Private</strong>
+                  <span>Your data is encrypted and protected at all times</span>
+                </div>
+              </div>
+            </div>
           </div>
-          {mostRecentForm && <div className="forms-recent-meta"><span>Last updated</span><strong>{formatDate(mostRecentForm.updatedAt)}</strong></div>}
         </header>
 
         <section className="forms-content" aria-labelledby="forms-list-title">
