@@ -344,7 +344,10 @@ export default function FormManagementPage() {
                   </button>
                 </div>
               ) : (
-                <form className="settings-form" onSubmit={(e) => e.preventDefault()}>
+                <form
+                  className="settings-form"
+                  onSubmit={(e) => e.preventDefault()}
+                >
                   <div className="form-group">
                     <label>Form Title</label>
                     <input

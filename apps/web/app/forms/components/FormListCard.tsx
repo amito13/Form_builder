@@ -10,9 +10,13 @@ type FormListItem = inferRouterOutputs<AppRouter>["form"]["listForms"][number];
 export function FormListCard({ form }: { form: FormListItem }) {
   const updatedAt = form.updatedAt ? new Date(form.updatedAt) : null;
   const summary = updatedAt
-    ? updatedAt.toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" })
+    ? updatedAt.toLocaleDateString(undefined, {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+      })
     : "Recently created";
-  
+
   const [copied, setCopied] = useState(false);
 
   const handleCopyLink = async () => {
@@ -33,12 +37,17 @@ export function FormListCard({ form }: { form: FormListItem }) {
         <span className="forms-card-status">Active</span>
       </div>
       <h3 className="forms-card-title">{form.title}</h3>
-      <p className="forms-card-description">{form.description || "No description yet."}</p>
-      
+      <p className="forms-card-description">
+        {form.description || "No description yet."}
+      </p>
+
       <footer className="forms-card-footer">
         <span>Updated {summary}</span>
         <div className="forms-card-actions">
-          <Link href={`/forms/manage/${form.id}`} className="forms-card-link forms-card-primary-link">
+          <Link
+            href={`/forms/manage/${form.id}`}
+            className="forms-card-link forms-card-primary-link"
+          >
             Manage <span aria-hidden="true">→</span>
           </Link>
           <button
