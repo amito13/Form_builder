@@ -8,12 +8,12 @@ import {
     getFormInputModel, getFormOutputModel, getFormByShareTokenInputModel, getPublicFormOutputModel,
     submitFormInputModel, submitFormOutputModel,
     getFormSubmissionsInputModel, getFormSubmissionsOutputModel,
-} from "./model";
+} from "./model.js";
 import {z}  from "zod";
 import { TRPCError } from "@trpc/server";
-import {authenticatedProcedure, publicProcedure, router} from "../../trpc";
-import {generatePath} from "../../utils/path-generator";
-import {formFieldService, formService,formSubmissionService} from "../../services/index";
+import {authenticatedProcedure, publicProcedure, router} from "../../trpc.js";
+import {generatePath} from "../../utils/path-generator.js";
+import {formFieldService, formService,formSubmissionService} from "../../services/index.js";
 
 const getPath = generatePath("/form");
 

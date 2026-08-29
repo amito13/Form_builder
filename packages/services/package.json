@@ -1,15 +1,32 @@
 {
   "name": "@repo/services",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "private": true,
   "type": "module",
+
+  "scripts": {
+    "build": "tsc"
+  },
+
+  "exports": {
+    "./user": {
+      "types": "./dist/user/index.d.ts",
+      "import": "./dist/user/index.js"
+    },
+    "./form": {
+      "types": "./dist/form/index.d.ts",
+      "import": "./dist/form/index.js"
+    },
+    "./form-field": {
+      "types": "./dist/form-field/index.d.ts",
+      "import": "./dist/form-field/index.js"
+    },
+    "./form-submission": {
+      "types": "./dist/form-submission/index.d.ts",
+      "import": "./dist/form-submission/index.js"
+    }
+  },
+
   "dependencies": {
     "@repo/database": "workspace:*",
     "@types/jsonwebtoken": "^9.0.10",

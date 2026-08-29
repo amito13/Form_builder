@@ -2,7 +2,7 @@ import {randomBytes,createHmac} from 'crypto'
 import jwt from "jsonwebtoken";
 import {db,eq} from "@repo/database"
 import {users} from "@repo/database"
-import { type CreateUserWithEmailAndPasswordInputType, GenerateUserTokenPayloadType, SignInUserWithEmailAndPasswordInputType, createUserWithEmailAndPasswordInput, generateUserTokenPayload, signInUserWithEmailAndPasswordInput } from './model'
+import { type CreateUserWithEmailAndPasswordInputType, GenerateUserTokenPayloadType, SignInUserWithEmailAndPasswordInputType, createUserWithEmailAndPasswordInput, generateUserTokenPayload, signInUserWithEmailAndPasswordInput } from './model.js'
 import "dotenv/config";
 
 class UserService {

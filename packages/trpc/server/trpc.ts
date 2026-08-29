@@ -1,9 +1,9 @@
 import {TRPCError,initTRPC} from '@trpc/server';
 
-import {createContext} from './context';
-import { getAuthenticationCookie } from './utils/cookie';
+import {createContext} from './context.js';
+import { getAuthenticationCookie } from './utils/cookie.js';
 
-import {userService} from './services';
+import {userService} from './services/index.js';
 
 export const tRPCContext = initTRPC
     .context<typeof createContext>()

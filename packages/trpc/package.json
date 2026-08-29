@@ -1,14 +1,18 @@
 {
   "name": "@repo/trpc",
   "private": true,
-  "main": "index.js",
+  "main": "./dist/src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "tsc --watch",
     "build": "tsc"
   },
   "exports": {
-    ".": "./src/index.ts"
+    ".": {
+      "types": "./dist/src/index.d.ts",
+      "import": "./dist/src/index.js",
+      "default": "./dist/src/index.js"
+    }
   },
   "license": "ISC",
   "type": "module",
@@ -18,7 +22,7 @@
   "dependencies": {
     "@trpc/server": "^11.18.0",
     "zod": "^4.4.3",
-    "@repo/database":"workspace:*",
-    "@repo/services":"workspace:*"
+    "@repo/database": "workspace:*",
+    "@repo/services": "workspace:*"
   }
 }

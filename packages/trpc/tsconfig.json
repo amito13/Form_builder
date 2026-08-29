@@ -1,12 +1,14 @@
 {
   "compilerOptions": {
     "target": "ES2022",
-    "module": "ESNext",
-    "moduleResolution": "Bundler",
+  "module": "NodeNext",
+  "moduleResolution": "NodeNext",
     "strict": true,
     "esModuleInterop": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "declaration": true,
+    "outDir": "./dist"
   },
-  "include": ["server/**/*", "src/**/*", "client/**/*"],
+  "include": ["server/**/*.ts", "src/**/*.ts", "client/**/*.ts"],
   "exclude": ["dist", "node_modules"]
 }

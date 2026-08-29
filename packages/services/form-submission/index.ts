@@ -4,7 +4,7 @@ import { z } from "zod"
 import {
    type SubmitFormInputType, submitFormInput,
     type GetFormSubmissionsInputType, getFormSubmissionsInput
-} from './model'
+} from './model.js'
 
 
 class FormSubmissionService {

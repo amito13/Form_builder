@@ -2,9 +2,11 @@
   "name": "api",
   "private": true,
   "main": "index.js",
-  "scripts": {
-    "dev": "tsx watch src/index.ts"
-  },
+ "scripts": {
+  "dev": "tsx watch src/index.ts",
+  "build": "tsc",
+  "start": "node dist/index.js"
+},
   "keywords": [],
   "author": "",
   "license": "ISC",

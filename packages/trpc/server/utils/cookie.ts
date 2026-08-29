@@ -1,5 +1,5 @@
 import {CookieOptions, Response, Request} from 'express';
-import { TRPCContext } from "../context";
+import { TRPCContext } from "../context.js";
 
 
 const ONE_MINUTE = 60 * 1000; // milliseconds

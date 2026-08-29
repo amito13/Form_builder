@@ -1,7 +1,7 @@
 import {asc, db,eq} from "@repo/database";
 // import { eq } from "drizzle-orm";
 import {formsTable,formFieldsTable} from "@repo/database"
-import { CreateFormInputType,createFormInput ,DeleteFormByIdInputType,GetFormByIdInputType,ListFormByUserIdInputType,listFormByUserIdInput, deleteFormByIdInput, getFormByIdInput} from "./model";
+import { CreateFormInputType,createFormInput ,DeleteFormByIdInputType,GetFormByIdInputType,ListFormByUserIdInputType,listFormByUserIdInput, deleteFormByIdInput, getFormByIdInput} from "./model.js";
 
 class FormService{
 

@@ -1,13 +1,13 @@
-import { userService } from "../../services";
-import {authenticatedProcedure, publicProcedure, router} from "../../trpc";
-import {clearAuthenticationCookie,setAuthenticationCookie} from "../../utils/cookie";
-import {generatePath} from "../../utils/path-generator";
+import { userService } from "../../services/index.js";
+import {authenticatedProcedure, publicProcedure, router} from "../../trpc.js";
+import {clearAuthenticationCookie,setAuthenticationCookie} from "../../utils/cookie.js";
+import {generatePath} from "../../utils/path-generator.js";
 import {createUserWithEmailAndPasswordInputModel, createUserWithEmailAndPasswordOutputModel,
     getLoggedInUserInfoInputModel,
     getLoggedInUserInfoOutputModel,
     signInUserWithEmailAndPasswordInputModel, signInUserWithEmailAndPasswordOutputModel,
     signOutInputModel, signOutOutputModel
-} from "./model";
+} from "./model.js";
 
 const getPath = generatePath("/authentication")
 

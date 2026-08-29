@@ -1,5 +1,5 @@
 import {z} from "zod";
-import { createFormInput } from "../form/model";
+import { createFormInput } from "../form/model.js";
 
 const fieldTypeEnum = z.enum(['TEXT', 'NUMBER', 'EMAIL', 'YES_NO', 'PASSWORD'])
 

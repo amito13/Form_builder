@@ -6,7 +6,7 @@ import {
     type UpdateFieldInputType, updateFieldInput,
     type GetFieldInputType, getFieldInput,
     type DeleteFieldInputType, deleteFieldInput 
-} from './model';
+} from './model.js';
 
 function toLabelKey(label: string): string {
     return label
