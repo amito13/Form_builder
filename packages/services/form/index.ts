@@ -18,7 +18,10 @@ class FormService{
             shareToken: formsTable.shareToken,
         })
 
-        if(!result || result.length === 0 || !result[0].id) throw new Error("Failed to create form");
+        if(!result || result.length === 0 || !result[0].id) {
+            console.log("Failed to create form, result:", result);
+            throw new Error("Failed to create form");
+        }
         return {id: result[0].id, shareToken: result[0].shareToken};
     }
     public async listFormsByUserId(payload: ListFormByUserIdInputType) {
