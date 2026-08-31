@@ -5,6 +5,9 @@
     "dev": "turbo dev",
     "build": "turbo build"
   },
+  "engines": {
+    "node": "22.23.2"
+  },
 "packageManager": "pnpm@10.24.0",
   "keywords": [],
   "author": "",
