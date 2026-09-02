@@ -11,6 +11,7 @@ export declare const formRouter: import("@trpc/server").TRPCBuiltRouter<{
         };
         output: {
             id: string;
+            formId: number;
         };
         meta: object;
     }>;

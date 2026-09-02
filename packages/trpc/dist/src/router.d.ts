@@ -67,6 +67,7 @@ export declare const appRouter: import("@trpc/server").TRPCBuiltRouter<{
             };
             output: {
                 id: string;
+                formId: number;
             };
             meta: object;
         }>;

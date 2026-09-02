@@ -7,6 +7,7 @@ export const createFormInputModel = z.object({
 
 export const createFormOutputModel = z.object({
     id: z.string().uuid().describe('Share token of the created form'),
+    formId: z.number().int().describe('Internal ID of the created form'),
 })
 
 export const listFormsOutputModel = z.array(

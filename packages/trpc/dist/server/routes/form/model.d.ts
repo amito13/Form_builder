@@ -5,6 +5,7 @@ export declare const createFormInputModel: z.ZodObject<{
 }, z.core.$strip>;
 export declare const createFormOutputModel: z.ZodObject<{
     id: z.ZodString;
+    formId: z.ZodNumber;
 }, z.core.$strip>;
 export declare const listFormsOutputModel: z.ZodArray<z.ZodObject<{
     id: z.ZodAny;

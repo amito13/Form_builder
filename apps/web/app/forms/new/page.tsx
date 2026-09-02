@@ -105,18 +105,37 @@ export default function CreateFormPage() {
   const [newFieldRequired, setNewFieldRequired] = useState(false);
   const [error, setError] = useState("");
 
+  const createField = trpc.form.createField.useMutation({
+    onError: (error) => {
+      setError(error.message || "Failed to add field");
+    },
+  });
+
   const createForm = trpc.form.createForm.useMutation({
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
+      try {
+        for (const field of fields) {
+          await createField.mutateAsync({
+            formId: data.formId,
+            label: field.label,
+            type: field.type,
+            description: field.description,
+            placeholder: field.placeholder,
+            isRequired: field.isRequired,
+          });
+        }
+      } catch (fieldError) {
+        setError(
+          fieldError instanceof Error
+            ? fieldError.message
+            : "Form was created, but some fields failed to save."
+        );
+        return;
+      }
       router.push(`/forms/${data.id}`);
     },
     onError: (error) => {
       setError(error.message || "Failed to create form");
-    },
-  });
-
-  const createField = trpc.form.createField.useMutation({
-    onError: (error) => {
-      setError(error.message || "Failed to add field");
     },
   });
 
@@ -346,9 +365,10 @@ export default function CreateFormPage() {
                 <button
                   type="submit"
                   className="btn-primary"
-                  disabled={!formTitle.trim() || createForm.isPending}
+                  disabled={!formTitle.trim() || createForm.isPending || createField.isPending}
                 >
-                  {createForm.isPending ? "Creating form…" : "Create form"} <span aria-hidden="true">→</span>
+                  {createForm.isPending || createField.isPending ? "Creating form…" : "Create form"}{" "}
+                  <span aria-hidden="true">→</span>
                 </button>
               </div>
             </form>

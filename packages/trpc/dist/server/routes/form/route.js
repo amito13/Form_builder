@@ -26,7 +26,7 @@ export const formRouter = router({
             description,
             createdBy: ctx.user.id,
         });
-        return { id: shareToken };
+        return { id: shareToken, formId: id };
     }),
     listForms: authenticatedProcedure
         .input(z.undefined())

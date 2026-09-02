@@ -27,6 +27,9 @@ export default function FormBuilderPage() {
   );
   const [newFieldLabel, setNewFieldLabel] = useState("");
   const [newFieldType, setNewFieldType] = useState<FieldType>("TEXT");
+  const [newFieldDescription, setNewFieldDescription] = useState("");
+  const [newFieldPlaceholder, setNewFieldPlaceholder] = useState("");
+  const [newFieldRequired, setNewFieldRequired] = useState(false);
   const [shareMessage, setShareMessage] = useState("");
   const [showResponses, setShowResponses] = useState(false);
   const refreshForm = () =>
@@ -39,6 +42,9 @@ export default function FormBuilderPage() {
   const createField = trpc.form.createField.useMutation({
     onSuccess: () => {
       setNewFieldLabel("");
+      setNewFieldDescription("");
+      setNewFieldPlaceholder("");
+      setNewFieldRequired(false);
       void refreshForm();
     },
   });
@@ -66,6 +72,9 @@ export default function FormBuilderPage() {
       formId: formQuery.data?.id ? Number(formQuery.data.id) : 0,
       label: newFieldLabel.trim(),
       type: newFieldType,
+      description: newFieldDescription.trim() || undefined,
+      placeholder: newFieldPlaceholder.trim() || undefined,
+      isRequired: newFieldRequired,
     });
   }
 
@@ -201,6 +210,37 @@ export default function FormBuilderPage() {
                   </option>
                 ))}
               </select>
+            </label>
+
+            <label>
+              <span>Description (optional)</span>
+              <input
+                value={newFieldDescription}
+                onChange={(event) => setNewFieldDescription(event.target.value)}
+                className="form-input"
+                maxLength={300}
+                placeholder="Help text for respondents"
+              />
+            </label>
+
+            <label>
+              <span>Placeholder (optional)</span>
+              <input
+                value={newFieldPlaceholder}
+                onChange={(event) => setNewFieldPlaceholder(event.target.value)}
+                className="form-input"
+                maxLength={100}
+                placeholder="e.g. John Doe"
+              />
+            </label>
+
+            <label className="checkbox-label">
+              <input
+                type="checkbox"
+                checked={newFieldRequired}
+                onChange={(event) => setNewFieldRequired(event.target.checked)}
+              />
+              <span>Required field</span>
             </label>
 
             <button
