@@ -97,9 +97,9 @@ export default function FormsPage() {
           >
             <span aria-hidden="true">+</span>Create new form
           </Link>
-          <a href="#forms-grid" className="forms-sidebar-action">
+          {/* <a href="#forms-grid" className="forms-sidebar-action">
             <span aria-hidden="true">↗</span>Responses
-          </a>
+          </a> */}
         </nav>
 
         <button
