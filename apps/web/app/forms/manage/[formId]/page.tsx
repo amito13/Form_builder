@@ -6,6 +6,7 @@ import { useParams, useRouter } from "next/navigation";
 import { trpc } from "@/trpc/trpc";
 import type { AppRouter } from "@repo/trpc";
 import type { inferRouterOutputs } from "@trpc/server";
+import { Mail, ArrowUpRight, ArrowRight, ArrowLeft } from "lucide-react";
 
 type FormData = inferRouterOutputs<AppRouter>["form"]["getForm"];
 type FormSubmission = inferRouterOutputs<AppRouter>["form"]["getFormSubmissions"][number];
@@ -130,10 +131,10 @@ export default function FormManagementPage() {
       <header className="form-management-header">
         <div className="form-management-header-content">
           <Link href="/forms" className="form-management-back">
-            ← Back to dashboard
+            <ArrowLeft size={15} aria-hidden="true" /> Back to dashboard
           </Link>
           <div className="form-management-title-section">
-            <h1>{form.title}</h1>
+            <h1 title={form.title}>{form.title}</h1>
             <p className="form-management-meta">
               Form #{formId} • {form.fields.length} fields •{" "}
               {responseCount} responses
@@ -146,14 +147,14 @@ export default function FormManagementPage() {
             onClick={handleCopyShareLink}
             title="Copy share link"
           >
-            {copied ? "Link copied!" : "Copy share link"} <span>↗</span>
+            {copied ? "Link copied!" : "Copy share link"} <ArrowUpRight size={15} aria-hidden="true" />
           </button>
           <Link
             href={`/forms/${form.shareToken}`}
             className="btn-primary"
             target="_blank"
           >
-            Preview form <span>→</span>
+            Preview form <ArrowRight size={15} aria-hidden="true" />
           </Link>
           <button
             className="form-management-delete-button"
@@ -268,7 +269,7 @@ export default function FormManagementPage() {
                 href={`/forms/${form.shareToken}`}
                 className="btn-primary form-overview-fields-action"
               >
-                Edit form fields →
+                Edit form fields <ArrowRight size={15} aria-hidden="true" />
               </Link>
             </div>
           </section>
@@ -418,7 +419,7 @@ export default function FormManagementPage() {
                     )}`}
                     className="share-method-btn"
                   >
-                    <span>📧</span>
+                    <span><Mail size={22} aria-hidden="true" /></span>
                     Email
                   </a>
                   <a

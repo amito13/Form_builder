@@ -7,6 +7,7 @@ import Link from "next/link";
 import { trpc } from "@/trpc/trpc";
 import { FormListCard } from "./components/FormListCard";
 import { FormListEmptyState } from "./components/FormListEmptyState";
+import { Sun, Moon, Sparkles, FileText, BarChart3, Link2, ShieldCheck, Plus, Search } from "lucide-react";
 
 type FormListItem = inferRouterOutputs<AppRouter>["form"]["listForms"][number];
 
@@ -95,7 +96,7 @@ export default function FormsPage() {
             href="/forms/new"
             className="forms-sidebar-action forms-sidebar-action-primary"
           >
-            <span aria-hidden="true">+</span>Create new form
+            <Plus size={16} aria-hidden="true" />Create new form
           </Link>
           {/* <a href="#forms-grid" className="forms-sidebar-action">
             <span aria-hidden="true">↗</span>Responses
@@ -109,7 +110,7 @@ export default function FormsPage() {
           title={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
         >
           <span className="forms-theme-toggle-icon">
-            {theme === "dark" ? "☀️" : "🌙"}
+            {theme === "dark" ? <Sun size={18} aria-hidden="true" /> : <Moon size={18} aria-hidden="true" />}
           </span>
           <span className="forms-theme-toggle-label">
             {theme === "dark" ? "Light" : "Dark"}
@@ -130,7 +131,7 @@ export default function FormsPage() {
       <section className="forms-workspace" aria-labelledby="forms-title">
         <header className="forms-hero-section">
           <div className="forms-hero-content">
-            <div className="forms-hero-badge">✨ Welcome to Formroom</div>
+            <div className="forms-hero-badge"><Sparkles size={14} aria-hidden="true" /> Welcome to Formroom</div>
             <h1 className="forms-hero-title">Collect feedback effortlessly</h1>
             <p className="forms-hero-subtitle">
               Create beautiful forms, gather responses, and understand your
@@ -139,28 +140,28 @@ export default function FormsPage() {
 
             <div className="forms-features-grid">
               <div className="forms-feature-item">
-                <div className="forms-feature-icon">📋</div>
+                <div className="forms-feature-icon"><FileText size={20} aria-hidden="true" /></div>
                 <div className="forms-feature-text">
                   <strong>Easy Creation</strong>
                   <span>Build forms in minutes with our intuitive builder</span>
                 </div>
               </div>
               <div className="forms-feature-item">
-                <div className="forms-feature-icon">📊</div>
+                <div className="forms-feature-icon"><BarChart3 size={20} aria-hidden="true" /></div>
                 <div className="forms-feature-text">
                   <strong>Smart Analytics</strong>
                   <span>Visualize and analyze responses in real-time</span>
                 </div>
               </div>
               <div className="forms-feature-item">
-                <div className="forms-feature-icon">🔗</div>
+                <div className="forms-feature-icon"><Link2 size={20} aria-hidden="true" /></div>
                 <div className="forms-feature-text">
                   <strong>Easy Sharing</strong>
                   <span>Share your forms via link, email, or social media</span>
                 </div>
               </div>
               <div className="forms-feature-item">
-                <div className="forms-feature-icon">🔒</div>
+                <div className="forms-feature-icon"><ShieldCheck size={20} aria-hidden="true" /></div>
                 <div className="forms-feature-text">
                   <strong>Secure & Private</strong>
                   <span>Your data is encrypted and protected at all times</span>
@@ -179,6 +180,7 @@ export default function FormsPage() {
 
             <label className="forms-search">
               <span className="sr-only">Search forms</span>
+              <Search className="forms-search-icon" size={16} aria-hidden="true" />
               <input
                 value={search}
                 onChange={(event) => setSearch(event.target.value)}

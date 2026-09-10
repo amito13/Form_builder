@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { trpc } from "@/trpc/trpc";
+import { Settings2, Plus, Trash2, Eye } from "lucide-react";
 
 const fieldTypes = ["TEXT", "NUMBER", "EMAIL", "YES_NO", "PASSWORD"] as const;
 type FieldType = (typeof fieldTypes)[number];
@@ -210,7 +211,7 @@ export default function CreateFormPage() {
           {/* Left Panel: Field Addition */}
           <aside className="builder-add-panel">
             <p className="forms-section-label">Add Fields</p>
-            <h2>Build your question set</h2>
+            <h2><Settings2 size={20} aria-hidden="true" />Build your question set</h2>
             <form onSubmit={addField} className="builder-add-form">
               <label>
                 <span>Question label</span>
@@ -270,7 +271,7 @@ export default function CreateFormPage() {
                 className="btn-primary builder-add-button"
                 disabled={!newFieldLabel.trim() || createField.isPending}
               >
-                {createField.isPending ? "Adding…" : "Add field"} <span aria-hidden="true">+</span>
+                {createField.isPending ? "Adding…" : "Add field"} <Plus size={16} aria-hidden="true" />
               </button>
             </form>
           </aside>
@@ -326,9 +327,9 @@ export default function CreateFormPage() {
 
                 {fields.length === 0 ? (
                   <div className="builder-empty">
-                    <span aria-hidden="true">+</span>
-                    <h3>No fields yet</h3>
-                    <p>Add your first field from the panel to the left.</p>
+                    <span aria-hidden="true"><Plus size={20} /></span>
+                    <h3>No questions yet</h3>
+                    <p>Start building your form by adding your first question from the panel to the left.</p>
                   </div>
                 ) : (
                   <div className="builder-field-list">
@@ -352,7 +353,7 @@ export default function CreateFormPage() {
                           className="btn-ghost builder-field-delete"
                           onClick={() => removeField(field.id)}
                         >
-                          Delete
+                          <Trash2 size={14} aria-hidden="true" /> Delete
                         </button>
                       </div>
                     ))}
@@ -387,7 +388,7 @@ export default function CreateFormPage() {
           <div className="form-preview">
             {!formTitle.trim() && fields.length === 0 ? (
               <div className="form-preview-empty">
-                <div className="form-preview-empty-icon">👀</div>
+                <div className="form-preview-empty-icon"><Eye size={32} aria-hidden="true" /></div>
                 <p className="form-preview-empty-text">
                   Add a form title and at least one field to see the live preview
                 </p>

@@ -36,7 +36,7 @@ export function FormListCard({ form }: { form: FormListItem }) {
         <span>Form #{String(form.id)}</span>
         <span className="forms-card-status">Active</span>
       </div>
-      <h3 className="forms-card-title">{form.title}</h3>
+      <h3 className="forms-card-title" title={form.title}>{form.title}</h3>
       <p className="forms-card-description">
         {form.description || "No description yet."}
       </p>
