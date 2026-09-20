@@ -20,7 +20,7 @@ export default function AuthPage() {
   const activeMutation = isSigningUp ? signUpMutation : signInMutation;
   const isSubmitting = signInMutation.isPending || signUpMutation.isPending;
 
-  useEffect(() => { if (userQuery.isSuccess) goToForms(); }, [userQuery.isSuccess]);
+  useEffect(() => { if (userQuery.isSuccess) router.replace("/forms"); }, [userQuery.isSuccess, router]);
 
   function changeMode(nextMode: AuthMode) { setMode(nextMode); signInMutation.reset(); signUpMutation.reset(); }
   function handleSubmit(event: FormEvent<HTMLFormElement>) {

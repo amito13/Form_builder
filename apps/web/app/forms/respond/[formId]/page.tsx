@@ -51,7 +51,7 @@ export default function PublicFormPage() {
     if (submitForm.isPending) return;
     submitForm.mutate({
       formId: Number(form.id),
-      values: form.fields.map((field: any) => ({
+      values: form.fields.map((field) => ({
         formFieldId: Number(field.id),
         value: values[String(field.id)] || "",
       })),
@@ -78,7 +78,7 @@ export default function PublicFormPage() {
           />
         ) : (
           <form className="public-form-card" onSubmit={submit}>
-            {form.fields.map((field: any) => (
+            {form.fields.map((field) => (
               <ResponseField
                 key={String(field.id)}
                 field={field}

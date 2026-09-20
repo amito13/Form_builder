@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Form Builder Workspace",
-  description: "Workspace index for scanning and opening forms",
+  title: "Formroom — A place for every question",
+  description: "Create forms, share your questions, and keep every response in one place.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

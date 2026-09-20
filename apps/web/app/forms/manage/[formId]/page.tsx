@@ -8,7 +8,6 @@ import type { AppRouter } from "@repo/trpc";
 import type { inferRouterOutputs } from "@trpc/server";
 import { Mail, ArrowUpRight, ArrowRight, ArrowLeft } from "lucide-react";
 
-type FormData = inferRouterOutputs<AppRouter>["form"]["getForm"];
 type FormSubmission = inferRouterOutputs<AppRouter>["form"]["getFormSubmissions"][number];
 
 type TabType = "overview" | "responses" | "settings" | "share";
@@ -38,7 +37,7 @@ export default function FormManagementPage() {
 
   const responsesQuery = trpc.form.getFormSubmissions.useQuery(
     { formId },
-    { enabled: formId > 0 && activeTab === "responses", retry: false }
+    { enabled: formId > 0 && formQuery.isSuccess, retry: false }
   );
 
   const deleteForm = trpc.form.deleteForm.useMutation({
@@ -48,14 +47,6 @@ export default function FormManagementPage() {
   });
 
   const form = formQuery.data;
-
-  // Initialize edit fields when form loads
-  useMemo(() => {
-    if (form && !isEditing) {
-      setEditTitle(form.title);
-      setEditDescription(form.description || "");
-    }
-  }, [form, isEditing]);
 
   const handleCopyShareLink = async () => {
     if (!form?.shareToken) return;
@@ -120,7 +111,7 @@ export default function FormManagementPage() {
     );
   }
 
-  const responseCount = responsesQuery.data?.length || 0;
+  const responseCount = responsesQuery.data?.length ?? "—";
   const shareLink = form.shareToken
     ? `${window.location.origin}/forms/respond/${form.shareToken}`
     : "";
@@ -150,9 +141,10 @@ export default function FormManagementPage() {
             {copied ? "Link copied!" : "Copy share link"} <ArrowUpRight size={15} aria-hidden="true" />
           </button>
           <Link
-            href={`/forms/${form.shareToken}`}
+            href={`/forms/respond/${form.shareToken}`}
             className="btn-primary"
             target="_blank"
+            rel="noopener noreferrer"
           >
             Preview form <ArrowRight size={15} aria-hidden="true" />
           </Link>
@@ -166,6 +158,8 @@ export default function FormManagementPage() {
           </button>
         </div>
       </header>
+
+      {deleteForm.error && <p className="new-form-error" role="alert">{deleteForm.error.message}</p>}
 
       {/* Tabs */}
       <nav className="form-management-tabs" role="tablist">
@@ -339,7 +333,7 @@ export default function FormManagementPage() {
                   </div>
                   <button
                     className="btn-secondary"
-                    onClick={() => setIsEditing(true)}
+                    onClick={() => { setEditTitle(form.title); setEditDescription(form.description || ""); setIsEditing(true); }}
                   >
                     Edit Settings
                   </button>
@@ -350,8 +344,9 @@ export default function FormManagementPage() {
                   onSubmit={(e) => e.preventDefault()}
                 >
                   <div className="form-group">
-                    <label>Form Title</label>
+                    <label htmlFor="form-title">Form Title</label>
                     <input
+                      id="form-title"
                       type="text"
                       value={editTitle}
                       onChange={(e) => setEditTitle(e.target.value)}
@@ -360,8 +355,9 @@ export default function FormManagementPage() {
                     />
                   </div>
                   <div className="form-group">
-                    <label>Description (optional)</label>
+                    <label htmlFor="form-description">Description (optional)</label>
                     <textarea
+                      id="form-description"
                       value={editDescription}
                       onChange={(e) => setEditDescription(e.target.value)}
                       className="form-input"
@@ -466,7 +462,7 @@ export default function FormManagementPage() {
                   <li>The share link allows anyone to fill out your form</li>
                   <li>No login required for respondents</li>
                   <li>Responses are saved automatically</li>
-                  <li>You can regenerate the link anytime</li>
+
                 </ul>
               </div>
             </div>
